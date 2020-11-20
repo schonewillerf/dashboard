@@ -12,7 +12,8 @@ public class BurndownData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private Date date;
-    private int quantity;
+    private int currentQuantity;
+    private int estimatedQuantity;
 
     public int getId() {
         return id;
@@ -30,11 +31,19 @@ public class BurndownData {
         this.date = date;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public int getCurrentQuantity() {
+        return currentQuantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setCurrentQuantity(int currentQuantity) {
+        this.currentQuantity = currentQuantity;
+    }
+
+    public int getEstimatedQuantity() {
+        return estimatedQuantity;
+    }
+
+    public void setEstimatedQuantity(int estimatedQuantity) {
+        this.estimatedQuantity = estimatedQuantity;
     }
 }
