@@ -27,92 +27,146 @@ function number_format(number, decimals, dec_point, thousands_sep) {
   return s.join(dec);
 }
 
-// Area Chart Example
-var ctx = document.getElementById("myAreaChart");
-var myLineChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-    datasets: [{
-      label: "Earnings",
-      lineTension: 0.3,
-      backgroundColor: "rgba(78, 115, 223, 0.05)",
-      borderColor: "rgba(78, 115, 223, 1)",
-      pointRadius: 3,
-      pointBackgroundColor: "rgba(78, 115, 223, 1)",
-      pointBorderColor: "rgba(78, 115, 223, 1)",
-      pointHoverRadius: 3,
-      pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-      pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-      pointHitRadius: 10,
-      pointBorderWidth: 2,
-      data: [0, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000],
-    }],
-  },
-  options: {
-    maintainAspectRatio: false,
-    layout: {
-      padding: {
-        left: 10,
-        right: 25,
-        top: 25,
-        bottom: 0
-      }
-    },
-    scales: {
-      xAxes: [{
-        time: {
-          unit: 'date'
-        },
-        gridLines: {
-          display: false,
-          drawBorder: false
-        },
-        ticks: {
-          maxTicksLimit: 7
-        }
-      }],
-      yAxes: [{
-        ticks: {
-          maxTicksLimit: 5,
-          padding: 10,
-          // Include a dollar sign in the ticks
-          callback: function(value, index, values) {
-            return '$' + number_format(value);
-          }
-        },
-        gridLines: {
-          color: "rgb(234, 236, 244)",
-          zeroLineColor: "rgb(234, 236, 244)",
-          drawBorder: false,
-          borderDash: [2],
-          zeroLineBorderDash: [2]
-        }
-      }],
-    },
-    legend: {
-      display: false
-    },
-    tooltips: {
-      backgroundColor: "rgb(255,255,255)",
-      bodyFontColor: "#858796",
-      titleMarginBottom: 10,
-      titleFontColor: '#6e707e',
-      titleFontSize: 14,
-      borderColor: '#dddfeb',
-      borderWidth: 1,
-      xPadding: 15,
-      yPadding: 15,
-      displayColors: false,
-      intersect: false,
-      mode: 'index',
-      caretPadding: 10,
-      callbacks: {
-        label: function(tooltipItem, chart) {
-          var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-          return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
-        }
-      }
+//Send HTTP request
+const Http = new XMLHttpRequest();
+const url='http://localhost:8080/burndowndata';
+Http.open("GET", url);
+Http.send();
+
+//Wait for HTTP response
+var labels = new Array();
+var currentQuantityArray = new Array();
+var estimatedQuantityArray = new Array();
+
+Http.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+       // Typical action to be performed when the document is ready:
+       var json = JSON.parse(Http.responseText);
+       console.log(json);
+
+       for(var i = 0; i < json.length; i++) {
+           var obj = json[i];
+
+           var formattedDate = new Date(obj.date);
+           labels.push(formattedDate.getDate() + "-" + formattedDate.getMonth() + "-" + formattedDate.getFullYear());
+
+           var currentQuantity = obj.currentQuantity;
+           var estimatedQuantity = obj.estimatedQuantity;
+
+           if(currentQuantity !== -1){
+            currentQuantityArray.push(currentQuantity);
+           }
+           
+           estimatedQuantityArray.push(estimatedQuantity);
+       }
+       console.log(labels);
+       console.log(currentQuantityArray);
+       console.log(estimatedQuantityArray);
+
+       // Area Chart Example
+       var ctx = document.getElementById("myAreaChart");
+       var myLineChart = new Chart(ctx, {
+         type: 'line',
+         data: {
+           labels: labels,
+           datasets: [{
+             label: "Actueel",
+             lineTension: 0.3,
+             backgroundColor: "rgba(78, 115, 223, 0.05)",
+             borderColor: "rgba(78, 115, 223, 1)",
+             pointRadius: 3,
+             pointBackgroundColor: "rgba(78, 115, 223, 1)",
+             pointBorderColor: "rgba(78, 115, 223, 1)",
+             pointHoverRadius: 3,
+             pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+             pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+             pointHitRadius: 10,
+             pointBorderWidth: 2,
+             data: currentQuantityArray,
+           },
+           {
+                 label: "Ideaal",
+                 lineTension: 0.3,
+                 backgroundColor: "rgba(28, 200, 138, 0.05)",
+                 borderColor: "rgba(28, 200, 138, 1)",
+                 pointRadius: 3,
+                 pointBackgroundColor: "rgba(28, 200, 138, 1)",
+                 pointBorderColor: "rgba(28, 200, 138, 1)",
+                 pointHoverRadius: 3,
+                 pointHoverBackgroundColor: "rgba(28, 200, 138, 1)",
+                 pointHoverBorderColor: "rgba(28, 200, 138, 1)",
+                 pointHitRadius: 10,
+                 pointBorderWidth: 2,
+                 data: estimatedQuantityArray,
+               }],
+         },
+         options: {
+           maintainAspectRatio: false,
+           layout: {
+             padding: {
+               left: 10,
+               right: 25,
+               top: 25,
+               bottom: 0
+             }
+           },
+           scales: {
+             xAxes: [{
+               time: {
+                 unit: 'date'
+               },
+               gridLines: {
+                 display: false,
+                 drawBorder: false
+               },
+               ticks: {
+                 maxTicksLimit: 7
+               }
+             }],
+             yAxes: [{
+               ticks: {
+                 maxTicksLimit: 5,
+                 padding: 10,
+                 // Include a dollar sign in the ticks
+                 callback: function(value, index, values) {
+                   return number_format(value);
+                 }
+               },
+               gridLines: {
+                 color: "rgb(234, 236, 244)",
+                 zeroLineColor: "rgb(234, 236, 244)",
+                 drawBorder: false,
+                 borderDash: [2],
+                 zeroLineBorderDash: [2]
+               }
+             }],
+           },
+           legend: {
+             display: false
+           },
+           tooltips: {
+             backgroundColor: "rgb(255,255,255)",
+             bodyFontColor: "#858796",
+             titleMarginBottom: 10,
+             titleFontColor: '#6e707e',
+             titleFontSize: 14,
+             borderColor: '#dddfeb',
+             borderWidth: 1,
+             xPadding: 15,
+             yPadding: 15,
+             displayColors: false,
+             intersect: false,
+             mode: 'index',
+             caretPadding: 10,
+             callbacks: {
+               label: function(tooltipItem, chart) {
+                 var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                 return datasetLabel + " " + number_format(tooltipItem.yLabel);
+               }
+             }
+           }
+         }
+       });
     }
-  }
-});
+};
+
