@@ -18,13 +18,6 @@ public class Controller {
     @CrossOrigin(origins ="*", allowedHeaders ="*")
     @GetMapping("/burndowndata")
     public List<BurndownData> getBurndownData() throws ParseException {
-        BurndownData burndownData = new BurndownData();
-        Date date2=new SimpleDateFormat("yyyy-MM-dd").parse("20-11-2020");
-        burndownData.setDate(date2);
-        burndownData.setEstimatedQuantity(10);
-        burndownData.setCurrentQuantity(10);
-        burndownDataRepository.save(burndownData);
-
         String sDate1="31-10-2020";
         Date date1=new SimpleDateFormat("yyyy-MM-dd").parse(sDate1);
         return burndownDataRepository.findAllByDateBetweenOrderByDate(date1, new Date());
