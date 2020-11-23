@@ -42,7 +42,6 @@ Http.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
        // Typical action to be performed when the document is ready:
        var json = JSON.parse(Http.responseText);
-       console.log(json);
 
        for(var i = 0; i < json.length; i++) {
            var obj = json[i];
@@ -59,9 +58,6 @@ Http.onreadystatechange = function() {
            
            estimatedQuantityArray.push(estimatedQuantity);
        }
-       console.log(labels);
-       console.log(currentQuantityArray);
-       console.log(estimatedQuantityArray);
 
        // Area Chart Example
        var ctx = document.getElementById("myAreaChart");

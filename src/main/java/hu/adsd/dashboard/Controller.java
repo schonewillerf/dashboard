@@ -14,6 +14,8 @@ public class Controller {
     private IndicatorRepository indicatorRepository;
     @Autowired
     private BurndownDataRepository burndownDataRepository;
+    @Autowired
+    private SentimentDataRepository sentimentDataRepository;
 
     @CrossOrigin(origins ="*", allowedHeaders ="*")
     @GetMapping("/burndowndata")
@@ -21,6 +23,15 @@ public class Controller {
         String sDate1="31-10-2020";
         Date date1=new SimpleDateFormat("yyyy-MM-dd").parse(sDate1);
         return burndownDataRepository.findAllByDateBetweenOrderByDate(date1, new Date());
+    }
+
+    @CrossOrigin(origins ="*", allowedHeaders ="*")
+    @GetMapping("/sentimentdata")
+    public List<Object[]> getSentimentData() throws ParseException {
+        String sDate1="2020-10-31";
+        Date date1=new SimpleDateFormat("yyyy-MM-dd").parse(sDate1);
+
+        return sentimentDataRepository.countTotalCommentsByYear(date1);
     }
 
     @GetMapping("/indicator")
