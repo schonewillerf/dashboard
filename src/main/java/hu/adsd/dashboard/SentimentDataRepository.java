@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface SentimentDataRepository extends JpaRepository<SentimentData, Integer> {
-    @Query("SELECT value, COUNT(id) FROM SentimentData WHERE date = ?1 GROUP BY value ORDER BY value ASC")
-    List<Object[]> countTotalCommentsByYear(Date date);
+
+    @Query("SELECT SDE.description, COUNT(SD.id) FROM SentimentData as SD JOIN SentimentDescription as SDE ON SDE.id = SD.value WHERE SD.date = ?1 GROUP BY SD.value")
+    List<Object[]> countSentimentByValue(Date date);
 }

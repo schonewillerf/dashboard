@@ -13,10 +13,13 @@ Http2.onreadystatechange = function() {
         // Typical action to be performed when the document is ready:
         var json = JSON.parse(Http2.responseText);
         var values = new Array();
+        var names = new Array();
+        var html = "";
 
         for(var i = 0; i < json.length; i++) {
             var obj = json[i];
             values.push(obj[1]);
+            names.push(obj[0]);
         }
 
         // Pie Chart Example
@@ -24,7 +27,7 @@ Http2.onreadystatechange = function() {
         var myPieChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: ["Goed", "Tevreden", "Ontevreden"],
+                labels: names,
                 datasets: [{
                     data: values,
                     backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
