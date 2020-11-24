@@ -20,7 +20,6 @@ public class Controller {
     @Autowired
     private TopContributorDataRepository topContributorDataRepository;
 
-    @CrossOrigin(origins ="*", allowedHeaders ="*")
     @GetMapping("/burndowndata")
     public List<BurndownData> getBurndownData() throws ParseException {
         String sDate1="31-10-2020";
@@ -29,7 +28,6 @@ public class Controller {
         return burndownDataRepository.findAllByDateBetweenOrderByDate(date1, new Date());
     }
 
-    @CrossOrigin(origins ="*", allowedHeaders ="*")
     @GetMapping("/sentimentdata")
     public List<Object[]> getSentimentData() throws ParseException {
         String currentdate = String.valueOf(LocalDate.now());
@@ -79,7 +77,6 @@ public class Controller {
         return indicatorRepository.findAll();
     }
 
-    @CrossOrigin(origins ="*", allowedHeaders ="*")
     @DeleteMapping("/indicator/{id}")
     public List<Indicator> deleteIndicator(@PathVariable int id){
         indicatorRepository.deleteById(id);
