@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -16,21 +17,42 @@ public class Controller {
     private BurndownDataRepository burndownDataRepository;
     @Autowired
     private SentimentDataRepository sentimentDataRepository;
+    @Autowired
+    private TopContributorDataRepository topContributorDataRepository;
 
     @CrossOrigin(origins ="*", allowedHeaders ="*")
     @GetMapping("/burndowndata")
     public List<BurndownData> getBurndownData() throws ParseException {
         String sDate1="31-10-2020";
         Date date1=new SimpleDateFormat("yyyy-MM-dd").parse(sDate1);
+
         return burndownDataRepository.findAllByDateBetweenOrderByDate(date1, new Date());
     }
 
     @CrossOrigin(origins ="*", allowedHeaders ="*")
     @GetMapping("/sentimentdata")
     public List<Object[]> getSentimentData() throws ParseException {
-        String sDate1="2020-10-31";
-        Date date1=new SimpleDateFormat("yyyy-MM-dd").parse(sDate1);
-        return sentimentDataRepository.countSentimentByValue(date1);
+        String currentdate = String.valueOf(LocalDate.now());
+        Date formattedDate = new SimpleDateFormat("yyyy-MM-dd").parse(currentdate);
+
+        return sentimentDataRepository.countSentimentByValue(formattedDate);
+    }
+
+    @CrossOrigin(origins ="*", allowedHeaders ="*")
+    @PostMapping("/sentimentdata/{vote}")
+    public List<Object[]> postSentimentData(@PathVariable int vote) throws ParseException {
+        String currentdate = String.valueOf(LocalDate.now());
+        Date formattedDate = new SimpleDateFormat("yyyy-MM-dd").parse(currentdate);
+
+        sentimentDataRepository.save(new SentimentData(vote));
+
+        return sentimentDataRepository.countSentimentByValue(formattedDate);
+    }
+
+    @CrossOrigin(origins ="*", allowedHeaders ="*")
+    @GetMapping("/topcontributordata")
+    public List<TopContributorData> getTopContributorData() throws ParseException {
+        return topContributorDataRepository.findTop5ByOrderByStoryPointsDesc();
     }
 
     @GetMapping("/indicator")
@@ -53,6 +75,7 @@ public class Controller {
     public List<Indicator> updateIndicator(@RequestBody Indicator indicator){
         indicatorRepository.findById(indicator.getId()).orElseThrow();
         indicatorRepository.save(indicator);
+
         return indicatorRepository.findAll();
     }
 
@@ -60,6 +83,7 @@ public class Controller {
     @DeleteMapping("/indicator/{id}")
     public List<Indicator> deleteIndicator(@PathVariable int id){
         indicatorRepository.deleteById(id);
+
         return indicatorRepository.findAll();
     }
 
