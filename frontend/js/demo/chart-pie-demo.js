@@ -14,7 +14,6 @@ Http2.onreadystatechange = function() {
         var json = JSON.parse(Http2.responseText);
         var values = new Array();
         var names = new Array();
-        var html = "";
 
         for(var i = 0; i < json.length; i++) {
             var obj = json[i];
