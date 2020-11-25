@@ -1,4 +1,4 @@
-package hu.adsd.dashboard;
+package hu.adsd.dashboard.burndown;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

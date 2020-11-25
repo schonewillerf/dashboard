@@ -1,0 +1,3 @@
+.card{
+    min-height: calc(100vh/2 - 70px);
+}

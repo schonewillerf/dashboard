@@ -1,4 +1,4 @@
-package hu.adsd.dashboard;
+package hu.adsd.dashboard.burndown;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
