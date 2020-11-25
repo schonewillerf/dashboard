@@ -66,6 +66,7 @@ Http3.onreadystatechange = function () {
           hoverBackgroundColor: "#2e59d9",
           borderColor: "#4e73df",
           data: values,
+          maxBarThickness: 50
         }],
       },
       options: {
@@ -89,8 +90,7 @@ Http3.onreadystatechange = function () {
             },
             ticks: {
               maxTicksLimit: 6
-            },
-            maxBarThickness: 50,
+            }
           }],
           yAxes: [{
             ticks: {

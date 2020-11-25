@@ -1,4 +1,4 @@
-package hu.adsd.dashboard;
+package hu.adsd.dashboard.topContributors;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

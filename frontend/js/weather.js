@@ -3,20 +3,21 @@ var city="Amersfoort";
 var apiKey="3a7724b5c33a53b756d9aaeb997c3527";
 var requestUri="http://api.openweathermap.org/data/2.5/weather?q="+city+"&APPID="+apiKey;
 
-request.open("GET", requestUri, false);
+request.open("GET", requestUri);
 request.send();
-var status = request.status;
-if(status==200) {
-    var obj = JSON.parse(request.responseText);
-    getImgSrc(obj);
-    getDataFromApi(obj);
-    getCity(obj);
 
+//Wait for HTTP response
+request.onreadystatechange = function () {
+
+    // Typical action to be performed when the document is ready:
+    if (this.readyState == 4 && this.status == 200) {
+        var obj = JSON.parse(request.responseText);
+        getImgSrc(obj);
+        getDataFromApi(obj);
+        getCity(obj);
+    }
 }
-else if(status==404)
-    console.log("not found")
-else
-    console.log(request.statusText);
+
 
 
 
@@ -27,7 +28,7 @@ function getImgSrc( responseObject) {
     var objectWeather=weather[0];
     var id=objectWeather.id;
     var imgCode =getImageCode(id);
-    var imgSrc="http://openweathermap.org/img/wn/"+imgCode+"@2x.png";
+    var imgSrc="http://openweathermap.org/img/wn/"+imgCode+"@4x.png";
     document.getElementById("weerImg").src = imgSrc;
 
 }
@@ -73,35 +74,32 @@ function getImageCode(id) {
 
 // get temperature, humidity and wind speed
 
-function getDataFromApi(responseObject)
+function getDataFromApi(obj)
 {
-
     var objMain=obj.main;
-    console.log(objMain);
     var items = Object.keys(objMain);
     //
     items.map(key => {
-        let value = objMain[key];
         //temperature
         var temp_max=Math.round(objMain.temp_max-273);
         var temp_min=Math.round(objMain.temp_min-273);
         var temp=Math.round(objMain.temp-273);
-        document.getElementById("min_temp").innerHTML = temp_min+"℃";
-        document.getElementById("max_temp").innerHTML = temp_max+"℃";
+        document.getElementById("temp").innerHTML = temp + "℃";
+        document.getElementById("min_temp").innerHTML = temp_min + "℃";
+        document.getElementById("max_temp").innerHTML = temp_max + "℃";
         // wind speed
         var wind=obj.wind;
         var windSpeed=wind.speed;
-        document.getElementById("windSpeed").innerHTML = windSpeed+"m/s";
+        document.getElementById("windSpeed").innerHTML = windSpeed + "m/s";
         //airHumidity
         var humidity=objMain.humidity;
-        document.getElementById("airHumidity").innerHTML = humidity+"%";
+        document.getElementById("airHumidity").innerHTML = humidity + "%";
     });
 }
+
 // get location
 function getCity(responseObject)
 {
-    console.log("city:");
     var city=responseObject.name;
-    console.log(city);
     document.getElementById("city").innerHTML = city;
 }

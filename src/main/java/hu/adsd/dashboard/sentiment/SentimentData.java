@@ -1,4 +1,4 @@
-package hu.adsd.dashboard;
+package hu.adsd.dashboard.sentiment;
 
 import javax.persistence.*;
 import java.text.ParseException;

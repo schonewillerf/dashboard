@@ -1,4 +1,4 @@
-package hu.adsd.dashboard;
+package hu.adsd.dashboard.projectSummary;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -6,12 +6,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Indicator {
+public class ProjectSummaryData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    private int progress;
+    private int value;
 
     public int getId() {
         return id;
@@ -29,11 +29,11 @@ public class Indicator {
         this.name = name;
     }
 
-    public int getProgress() {
-        return progress;
+    public int getValue() {
+        return value;
     }
 
-    public void setProgress(int progress) {
-        this.progress = progress;
+    public void setValue(int value) {
+        this.value = value;
     }
 }
