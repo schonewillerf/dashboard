@@ -18,9 +18,11 @@ public class BurndownController {
 
     @GetMapping("/burndowndata")
     public List<BurndownData> getBurndownData() throws ParseException {
-        String sDate1="31-10-2020";
+        String sDate1="2020-10-31";
         Date date1=new SimpleDateFormat("yyyy-MM-dd").parse(sDate1);
+        String sDate2="2020-11-28";
+        Date date2=new SimpleDateFormat("yyyy-MM-dd").parse(sDate2);
 
-        return burndownDataRepository.findAllByDateBetweenOrderByDate(date1, new Date());
+        return burndownDataRepository.findAllByDateBetweenOrderByDate(date1, date2);
     }
 }
