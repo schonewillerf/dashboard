@@ -43,6 +43,7 @@ Http.onreadystatechange = function () {
         var labels = new Array();
         var currentQuantityArray = new Array();
         var estimatedQuantityArray = new Array();
+        var sentimentScoreArray = [];
 
         // Parse JSON
         var json = JSON.parse(Http.responseText);
@@ -56,10 +57,14 @@ Http.onreadystatechange = function () {
 
             var currentQuantity = obj.currentQuantity;
             var estimatedQuantity = obj.estimatedQuantity;
+            var sentimentScore = obj.sentimentScore;
 
             if (currentQuantity !== -1) {
                 currentQuantityArray.push(currentQuantity);
             }
+
+            // Check if the sentimentScore exists
+            if (sentimentScore !== -1) { sentimentScoreArray.push(sentimentScore); }
 
             estimatedQuantityArray.push(estimatedQuantity);
         }
@@ -71,6 +76,7 @@ Http.onreadystatechange = function () {
             data: {
                 labels: labels,
                 datasets: [{
+                    yAxisID: 'A',
                     label: "Actueel",
                     lineTension: 0.3,
                     backgroundColor: "rgba(78, 115, 223, 0.05)",
@@ -85,21 +91,38 @@ Http.onreadystatechange = function () {
                     pointBorderWidth: 2,
                     data: currentQuantityArray,
                 },
-                    {
-                        label: "Ideaal",
-                        lineTension: 0.3,
-                        backgroundColor: "rgba(28, 200, 138, 0.05)",
-                        borderColor: "rgba(28, 200, 138, 1)",
-                        pointRadius: 3,
-                        pointBackgroundColor: "rgba(28, 200, 138, 1)",
-                        pointBorderColor: "rgba(28, 200, 138, 1)",
-                        pointHoverRadius: 3,
-                        pointHoverBackgroundColor: "rgba(28, 200, 138, 1)",
-                        pointHoverBorderColor: "rgba(28, 200, 138, 1)",
-                        pointHitRadius: 10,
-                        pointBorderWidth: 2,
-                        data: estimatedQuantityArray,
-                    }],
+                {
+                    yAxisID: 'A',
+                    label: "Ideaal",
+                    lineTension: 0.3,
+                    backgroundColor: "rgba(28, 200, 138, 0.05)",
+                    borderColor: "rgba(28, 200, 138, 1)",
+                    pointRadius: 3,
+                    pointBackgroundColor: "rgba(28, 200, 138, 1)",
+                    pointBorderColor: "rgba(28, 200, 138, 1)",
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: "rgba(28, 200, 138, 1)",
+                    pointHoverBorderColor: "rgba(28, 200, 138, 1)",
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: estimatedQuantityArray,
+                },
+                {
+                    yAxisID: 'B',
+                    label: "Sentiment",
+                    lineTension: 0.3,
+                    backgroundColor: "rgba(246, 194, 62, 0.05)",
+                    borderColor: "rgba(246, 194, 62, 1)",
+                    pointRadius: 3,
+                    pointBackgroundColor: "rgba(246, 194, 62, 1)",
+                    pointBorderColor: "rgba(246, 194, 62, 1)",
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: "rgba(246, 194, 62, 1)",
+                    pointHoverBorderColor: "rgba(246, 194, 62, 1)",
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: sentimentScoreArray,
+                }],
             },
             options: {
                 maintainAspectRatio: false,
@@ -125,13 +148,12 @@ Http.onreadystatechange = function () {
                         }
                     }],
                     yAxes: [{
+                        id: 'A',
+                        type: 'linear',
+                        position: 'left',
                         ticks: {
                             maxTicksLimit: 5,
-                            padding: 10,
-                            // Include a dollar sign in the ticks
-                            callback: function (value, index, values) {
-                                return number_format(value);
-                            }
+                            padding: 10
                         },
                         gridLines: {
                             color: "rgb(234, 236, 244)",
@@ -140,7 +162,24 @@ Http.onreadystatechange = function () {
                             borderDash: [2],
                             zeroLineBorderDash: [2]
                         }
-                    }],
+                    },
+                    {
+                        id: 'B',
+                        type: 'linear',
+                        position: 'right',
+                        ticks: {
+                            maxTicksLimit: 5,
+                            padding: 10
+                        },
+                        gridLines: {
+                            color: "rgb(234, 236, 244)",
+                            zeroLineColor: "rgb(234, 236, 244)",
+                            drawBorder: false,
+                            borderDash: [2],
+                            zeroLineBorderDash: [2]
+                        }
+                    }
+                    ],
                 },
                 legend: {
                     display: false
@@ -162,7 +201,7 @@ Http.onreadystatechange = function () {
                     callbacks: {
                         label: function (tooltipItem, chart) {
                             var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-                            return datasetLabel + " " + number_format(tooltipItem.yLabel);
+                            return datasetLabel + " " + tooltipItem.yLabel;
                         }
                     }
                 }
