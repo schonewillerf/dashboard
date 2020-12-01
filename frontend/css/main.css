@@ -9,3 +9,8 @@
     width: 60%;
     float: left;
 }
+.legend-burndown{
+    position: absolute;
+    left: 0;
+    right: 0;
+}
