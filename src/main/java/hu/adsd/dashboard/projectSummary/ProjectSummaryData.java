@@ -11,7 +11,8 @@ public class ProjectSummaryData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    private int value;
+    private int storyPoints;
+    private int items;
 
     public int getId() {
         return id;
@@ -29,11 +30,19 @@ public class ProjectSummaryData {
         this.name = name;
     }
 
-    public int getValue() {
-        return value;
+    public int getStoryPoints() {
+        return storyPoints;
     }
 
-    public void setValue(int value) {
-        this.value = value;
+    public void setStoryPoints(int storyPoints) {
+        this.storyPoints = storyPoints;
+    }
+
+    public int getItems() {
+        return items;
+    }
+
+    public void setItems(int items) {
+        this.items = items;
     }
 }

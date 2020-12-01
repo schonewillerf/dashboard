@@ -29,7 +29,7 @@ function getImgSrc( responseObject) {
     var id=objectWeather.id;
     var imgCode =getImageCode(id);
     var imgSrc="http://openweathermap.org/img/wn/"+imgCode+"@4x.png";
-    document.getElementById("weerImg").src = imgSrc;
+    document.getElementById("weerImg").style.backgroundImage = 'url('+ imgSrc + ')';
 
 }
 //find image code by descrription id. Code of image is connected with id of weather description
@@ -77,7 +77,8 @@ function getImageCode(id) {
 function getDataFromApi(obj)
 {
     var objMain=obj.main;
-    var items = Object.keys(objMain);
+    console.log(obj);
+    var items = Object.keys(obj);
     //
     items.map(key => {
         //temperature
@@ -85,8 +86,8 @@ function getDataFromApi(obj)
         var temp_min=Math.round(objMain.temp_min-273);
         var temp=Math.round(objMain.temp-273);
         document.getElementById("temp").innerHTML = temp + "℃";
-        document.getElementById("min_temp").innerHTML = temp_min + "℃";
-        document.getElementById("max_temp").innerHTML = temp_max + "℃";
+/*        document.getElementById("min_temp").innerHTML = temp_min + "℃";
+        document.getElementById("max_temp").innerHTML = temp_max + "℃";*/
         // wind speed
         var wind=obj.wind;
         var windSpeed=wind.speed;
