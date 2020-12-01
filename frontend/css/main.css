@@ -1,15 +1,18 @@
-.card{
+.card {
     min-height: 415px;
 }
-#weerImg{
+
+#weerImg {
     background-repeat: no-repeat;
     background-position: bottom right;
 }
+
 #project-summary .summary-menu .summary-item.item-1 {
     width: 60%;
     float: left;
 }
-.legend-burndown{
+
+.legend-burndown {
     position: absolute;
     left: 0;
     right: 0;
