@@ -47,7 +47,7 @@
                     <div class="row">
 
                         <!-- Area Chart -->
-                        <div class="col-xl-2 col-lg-4">
+                        <div class="col-xl-4 col-lg-4">
                             <div class="card shadow mb-4">
                                 <!-- Card Header -->
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -57,8 +57,22 @@
                                 <div class="card-body">
                                     <div class="chart-area">
                                         <table class="table table-striped">
-                                            <tbody id="project-summary-table">
-                                            </tbody>
+                                            <div id="project-summary">
+                                                <div class="summary-menu container">
+                                                    <div class="row">
+                                                        <div class="summary-item col-6 font-weight-bold">Soort</div>
+                                                        <div class="summary-item col-3 font-weight-bold">Items</div>
+                                                        <div class="summary-item col-3 font-weight-bold">Story Points</div>
+                                                    </div>
+
+                                                    <div id="project-summary-data" class="row mt-2">
+
+                                                    </div>
+                                                    <div class="col-12 mt-4">
+                                                        <canvas id="summaryChart"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </table>
                                     </div>
                                 </div>
@@ -81,8 +95,64 @@
                             </div>
                         </div>
 
-                        <!-- Pie Chart -->
+                        <!-- Updates -->
                         <div class="col-xl-4 col-lg-6">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Updates</h6>
+                                </div>
+                                <div class="card-body">
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Top contributors Chart -->
+                        <div class="col-xl-4 col-lg-6">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header -->
+                                <div
+                                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Top 5 contributors</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-pie pt-4 pb-2">
+                                        <canvas id="myBarChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Weather Chart -->
+                        <div class="col-xl-2 col-lg-6">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header -->
+                                <div
+                                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Actueel weer</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div id="weerImg" class="card-body">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-sm weather">
+                                                <h3 class="font-weight-bold"><span id="city"></span></h3>
+                                                <p class="mt-4 mb-4">Temperatuur: <span class="font-weight-bold" id="temp"></span></p>
+                                                <!-- <p class="mt-4 mb-4">Min temperatuur: <span class="font-weight-bold" id="min_temp"></span></p>
+                                                <p class="mt-4 mb-4">Max temperatuur: <span class="font-weight-bold" id="max_temp"></span></p> -->
+                                                <p class="mt-4 mb-4">Luchtvochtigheid: <span class="font-weight-bold" id="airHumidity"></span></p>
+                                                <p class="mt-4 mb-4">Wind: <span class="font-weight-bold" id="windSpeed"></span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end of card body -->
+                            </div>
+                        </div>
+
+                        <!-- Sentiment Chart -->
+                        <div class="col-xl-2 col-lg-6">
                             <div class="card shadow mb-4">
                                 <!-- Card Header -->
                                 <div
@@ -117,64 +187,7 @@
                             </div>
                         </div>
 
-                        <!-- Project Card Example -->
-                        <div class="col-xl-4 col-lg-6">
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Updates</h6>
-                                </div>
-                                <div class="card-body">
 
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pie Chart -->
-                        <div class="col-xl-4 col-lg-6">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header -->
-                                <div
-                                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Top 5 contributors</h6>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-pie pt-4 pb-2">
-                                        <canvas id="myBarChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pie Chart -->
-                        <div class="col-xl-4 col-lg-6">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header -->
-                                <div
-                                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Actueel weer</h6>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-sm weather">
-                                                <h3 class="font-weight-bold"><span id="city"></span></h3>
-                                                <p class="mt-4 mb-4">Temperatuur: <span class="font-weight-bold" id="temp"></span></p>
-                                                <p class="mt-4 mb-4">Min temperatuur: <span class="font-weight-bold" id="min_temp"></span></p>
-                                                <p class="mt-4 mb-4">Max temperatuur: <span class="font-weight-bold" id="max_temp"></span></p>
-                                                <p class="mt-4 mb-4">Luchtvochtigheid: <span class="font-weight-bold" id="airHumidity"></span></p>
-                                                <p class="mt-4 mb-4">Wind: <span class="font-weight-bold" id="windSpeed"></span></p>
-                                            </div>
-                                            <div class="col-sm">
-                                                <img id="weerImg" src="" width="100%">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--end of card body -->
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -229,6 +242,7 @@
     <script src="js/chart-area.js"></script>
     <script src="js/chart-pie.js"></script>
     <script src="js/chart-bar.js"></script>
+    <script src="js/summary-chart.js"></script>
     <script src="js/weather.js"></script>
     <script src="js/api-calls.js"></script>
     <script src="js/functions.js"></script>

@@ -34,15 +34,16 @@ function getProjectSummary(){
             // Typical action to be performed when the document is ready:
             var json = JSON.parse(Http.responseText);
             var html = "";
+            var colors = ["#e74a3b", "#fd7e14", "#f6c23e", "#1cc88a"];
 
             for (var i = 0; i < json.length; i++) {
                 var obj = json[i];
-                html += "<tr>" +
-                    "<td>" + obj.name + "</td>" +
-                    "<td>" + obj.value + "</td>" +
-                    "</tr>";
+                html += "<div class='col-6 mt-2' style='color: " + colors[i] + "'>" + obj.name + "</div>" +
+                    "<div class='col-3 mt-2' style='color: " + colors[i] + "'>" + obj.items + "</div>" +
+                    "<div class='col-3 mt-2' style='color: " + colors[i] + "'>" + obj.storyPoints + "</div>";
             }
-            document.getElementById("project-summary-table").innerHTML = html;
+            document.getElementById("project-summary-data").innerHTML = html;
+            summaryChart(json);
         }
     };
 }
