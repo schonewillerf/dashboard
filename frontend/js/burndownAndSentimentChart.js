@@ -148,6 +148,10 @@ Http.onreadystatechange = function () {
                         }
                     }],
                     yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Story Points',
+                        },
                         id: 'A',
                         type: 'linear',
                         position: 'left',
@@ -164,6 +168,10 @@ Http.onreadystatechange = function () {
                         }
                     },
                     {
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Sentiment',
+                        },
                         id: 'B',
                         type: 'linear',
                         position: 'right',
