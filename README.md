@@ -1,2 +1,6 @@
+Dashboard Client and Server
 
-Hoi
+Run: `./mvnw spring-boot:run` 
+
+Test: `./mvnw test`
+
