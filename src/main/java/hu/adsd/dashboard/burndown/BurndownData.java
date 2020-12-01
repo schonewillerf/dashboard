@@ -1,9 +1,6 @@
 package hu.adsd.dashboard.burndown;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -13,7 +10,12 @@ public class BurndownData {
     private int id;
     private Date date;
     private int currentQuantity;
+
+    @Column(columnDefinition = "integer default -1")
     private int estimatedQuantity;
+
+    @Column(columnDefinition = "double default -1")
+    private double sentimentScore;
 
     public int getId() {
         return id;
@@ -45,5 +47,15 @@ public class BurndownData {
 
     public void setEstimatedQuantity(int estimatedQuantity) {
         this.estimatedQuantity = estimatedQuantity;
+    }
+
+    public double getSentimentScore()
+    {
+        return sentimentScore;
+    }
+
+    public void setSentimentScore( double sentimentScore )
+    {
+        this.sentimentScore = sentimentScore;
     }
 }
