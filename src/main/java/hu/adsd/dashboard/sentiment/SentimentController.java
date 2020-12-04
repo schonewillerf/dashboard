@@ -5,34 +5,47 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @RestController
 public class SentimentController {
-    private final SentimentDataRepository sentimentDataRepository;
 
-    public SentimentController(SentimentDataRepository sentimentDataRepository) {
+    private final SentimentDataRepository sentimentDataRepository;
+    private final DailySentimentRepository dailySentimentRepository;
+
+    public SentimentController(
+            SentimentDataRepository sentimentDataRepository,
+            DailySentimentRepository dailySentimentRepository ) {
+
         this.sentimentDataRepository = sentimentDataRepository;
+        this.dailySentimentRepository = dailySentimentRepository;
     }
 
     @GetMapping("/sentimentdata")
-    public List<Object[]> getSentimentData() throws ParseException {
-        String currentdate = String.valueOf(LocalDate.now());
-        Date formattedDate = new SimpleDateFormat("yyyy-MM-dd").parse(currentdate);
+    public List<Object[]> getSentimentData() {
+        LocalDate formattedDate = LocalDate.now();
 
         return sentimentDataRepository.countSentimentByValue(formattedDate);
     }
 
     @PostMapping("/sentimentdata/{vote}")
-    public List<Object[]> postSentimentData(@PathVariable int vote) throws ParseException {
-        String currentdate = String.valueOf(LocalDate.now());
-        Date formattedDate = new SimpleDateFormat("yyyy-MM-dd").parse(currentdate);
+    public List<Object[]> postSentimentData(@PathVariable int vote) {
+        LocalDate formattedDate = LocalDate.now();
 
         sentimentDataRepository.save(new SentimentData(vote));
+
+        // Update average vote in dailySentiment
+        double averageSentiment = sentimentDataRepository.calculateAverageSentiment( formattedDate );
+        System.out.println("average sentiment" + averageSentiment);
+
+        DailySentiment dailySentiment = dailySentimentRepository
+                .findByDate( formattedDate )
+                .orElse( new DailySentiment(formattedDate) );
+
+        dailySentiment.setAverageSentiment( averageSentiment );
+        dailySentimentRepository.save( dailySentiment );
+
 
         return sentimentDataRepository.countSentimentByValue(formattedDate);
     }
