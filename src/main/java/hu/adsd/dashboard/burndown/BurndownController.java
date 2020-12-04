@@ -40,8 +40,8 @@ public class BurndownController {
         burndownDataRepository.deleteAll();
 
         // Will be passed as parameters from API
-        LocalDate startDate = LocalDate.parse("2020-11-30");
-        LocalDate endDate = LocalDate.parse("2020-12-11");
+        String startDateString = "2020-11-30";
+        String endDateString = "2020-12-11";
         double totalStoryPointsPerSprint = 150;
 
         // Method variables
@@ -60,52 +60,41 @@ public class BurndownController {
         List<BurndownData> burndownDataPoints = new ArrayList<>();
 
         // Loop over Employees to get total working hours per sprint and per day
-        for (EmployeeData employeeData : allDevelopers)
+        for ( EmployeeData developer : allDevelopers)
         {
             // Get total hours per day
-            totalWorkingHoursPerDay[0] += employeeData.getWorkingHoursMo();
-            totalWorkingHoursPerDay[1] += employeeData.getWorkingHoursTu();
-            totalWorkingHoursPerDay[2] += employeeData.getWorkingHoursWe();
-            totalWorkingHoursPerDay[3] += employeeData.getWorkingHoursTh();
-            totalWorkingHoursPerDay[4] += employeeData.getWorkingHoursFr();
+            totalWorkingHoursPerDay[0] += developer.getWorkingHoursMo();
+            totalWorkingHoursPerDay[1] += developer.getWorkingHoursTu();
+            totalWorkingHoursPerDay[2] += developer.getWorkingHoursWe();
+            totalWorkingHoursPerDay[3] += developer.getWorkingHoursTh();
+            totalWorkingHoursPerDay[4] += developer.getWorkingHoursFr();
         }
 
-        // Needed an extra variable for this loop :(
-        LocalDate loopDate = LocalDate.parse("2020-11-30");
-        //
-        // Loop over days in the sprint to calculate total developer hours
-        while ( loopDate.compareTo( endDate ) <= 0 )
+        for ( LocalDate sprintDay : new SprintIterator( startDateString, endDateString ))
         {
-            int dayOfWeek = loopDate.getDayOfWeek().getValue() - 1;
-
-            totalWorkingHoursPerSprint += totalWorkingHoursPerDay[dayOfWeek];
-
-            loopDate = loopDate.plusDays( 1 );
+            int dayIndex = sprintDay.getDayOfWeek().getValue() - 1;
+            totalWorkingHoursPerSprint += totalWorkingHoursPerDay[dayIndex];
         }
 
         // Calculate SP per day
         for ( int i = 0; i < totalWorkingHoursPerDay.length; i++ )
         {
-            if ( totalStoryPointsPerSprint > 0 )
-            {
-                estimatedStoryPointsPerDayArray[i] =
-                        ( totalWorkingHoursPerDay[i] / totalWorkingHoursPerSprint ) * totalStoryPointsPerSprint;
-            }
+            estimatedStoryPointsPerDayArray[ i ] =
+                    ( totalWorkingHoursPerDay[ i ] / totalWorkingHoursPerSprint ) * totalStoryPointsPerSprint;
         }
 
         // Loop over days in sprint
-        while (startDate.compareTo(endDate) <= 0) {
+        for ( LocalDate sprintDay : new SprintIterator( startDateString, endDateString ))
+        {
+            // Get the day index
+            int dayIndex = sprintDay.getDayOfWeek().getValue() - 1;
 
-            // Get the estimated storypoints from current day
-            int dayOfWeek = startDate.getDayOfWeek().getValue() - 1;
-            totalStoryPointsPerSprint -= estimatedStoryPointsPerDayArray[dayOfWeek];
+            // Get the estimated SP from current day
+            totalStoryPointsPerSprint -= estimatedStoryPointsPerDayArray[ dayIndex ];
 
-            // Create burndowData point and add it to ArrayList
-            BurndownData burndownData = new BurndownData(startDate, (int) totalStoryPointsPerSprint);
+            // Create burndownData point and add it to ArrayList
+            BurndownData burndownData = new BurndownData( sprintDay, ( int ) totalStoryPointsPerSprint );
             burndownDataPoints.add(burndownData);
-
-            // Increment the day in the loop
-            startDate = startDate.plusDays(1);
         }
 
         // Save all burndownData points to repository
