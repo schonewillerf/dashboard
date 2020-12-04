@@ -45,47 +45,53 @@ public class BurndownController {
         double totalStoryPointsPerSprint = 150;
 
         // Method variables
-        List<EmployeeData> allEmployees = employeeDataRepository.findAll();
+        //
+        // All Developers
+        List<EmployeeData> allDevelopers = employeeDataRepository.findAllByIsDeveloperTrue();
+        //
+        // The total hours and estimated SP per day
+        double[] totalWorkingHoursPerDay = new double[7];
+        double[] estimatedStoryPointsPerDayArray = new double[7];
+        //
+        // The total hours in the entire sprint
         int totalWorkingHoursPerSprint = 0;
-        int totalWorkingHoursMonday = 0;
-        int totalWorkingHoursTuesday = 0;
-        int totalWorkingHoursWednesday = 0;
-        int totalWorkingHoursThursday = 0;
-        int totalWorkingHoursFriday = 0;
+        //
+        // The burndownDataPoints List
+        List<BurndownData> burndownDataPoints = new ArrayList<>();
 
         // Loop over Employees to get total working hours per sprint and per day
-        for (EmployeeData employeeData : allEmployees) {
-            if (employeeData.isDeveloper()) {
-                // Get total hours per sprint
-                totalWorkingHoursPerSprint += employeeData.getTotalWorkingHours();
-                // Get total hours per day
-                totalWorkingHoursMonday += employeeData.getWorkingHoursMo();
-                totalWorkingHoursTuesday += employeeData.getWorkingHoursTu();
-                totalWorkingHoursWednesday += employeeData.getWorkingHoursWe();
-                totalWorkingHoursThursday += employeeData.getWorkingHoursTh();
-                totalWorkingHoursFriday += employeeData.getWorkingHoursFr();
-            }
+        for (EmployeeData employeeData : allDevelopers)
+        {
+            // Get total hours per day
+            totalWorkingHoursPerDay[0] += employeeData.getWorkingHoursMo();
+            totalWorkingHoursPerDay[1] += employeeData.getWorkingHoursTu();
+            totalWorkingHoursPerDay[2] += employeeData.getWorkingHoursWe();
+            totalWorkingHoursPerDay[3] += employeeData.getWorkingHoursTh();
+            totalWorkingHoursPerDay[4] += employeeData.getWorkingHoursFr();
         }
 
-        // Calculate estimated storypoints that can be delivered per day based on working hours
-        double estimatedStoryPointsMonday = ((double) totalWorkingHoursMonday / totalWorkingHoursPerSprint) * totalStoryPointsPerSprint;
-        double estimatedStoryPointsTuesday = ((double) totalWorkingHoursTuesday / totalWorkingHoursPerSprint) * totalStoryPointsPerSprint;
-        double estimatedStoryPointsWednesday = ((double) totalWorkingHoursWednesday / totalWorkingHoursPerSprint) * totalStoryPointsPerSprint;
-        double estimatedStoryPointsThursday = ((double) totalWorkingHoursThursday / totalWorkingHoursPerSprint) * totalStoryPointsPerSprint;
-        double estimatedStoryPointsFriday = ((double) totalWorkingHoursFriday / totalWorkingHoursPerSprint) * totalStoryPointsPerSprint;
+        // Needed an extra variable for this loop :(
+        LocalDate loopDate = LocalDate.parse("2020-11-30");
+        //
+        // Loop over days in the sprint to calculate total developer hours
+        while ( loopDate.compareTo( endDate ) <= 0 )
+        {
+            int dayOfWeek = loopDate.getDayOfWeek().getValue() - 1;
 
-        // Prepare weekly array of estimated storypoint
-        double[] estimatedStoryPointsPerDayArray = {
-                estimatedStoryPointsMonday,
-                estimatedStoryPointsTuesday,
-                estimatedStoryPointsWednesday,
-                estimatedStoryPointsThursday,
-                estimatedStoryPointsFriday,
-                0,
-                0
-        };
+            totalWorkingHoursPerSprint += totalWorkingHoursPerDay[dayOfWeek];
 
-        List<BurndownData> burndownDataPoints = new ArrayList<>();
+            loopDate = loopDate.plusDays( 1 );
+        }
+
+        // Calculate SP per day
+        for ( int i = 0; i < totalWorkingHoursPerDay.length; i++ )
+        {
+            if ( totalStoryPointsPerSprint > 0 )
+            {
+                estimatedStoryPointsPerDayArray[i] =
+                        ( totalWorkingHoursPerDay[i] / totalWorkingHoursPerSprint ) * totalStoryPointsPerSprint;
+            }
+        }
 
         // Loop over days in sprint
         while (startDate.compareTo(endDate) <= 0) {
@@ -93,12 +99,6 @@ public class BurndownController {
             // Get the estimated storypoints from current day
             int dayOfWeek = startDate.getDayOfWeek().getValue() - 1;
             totalStoryPointsPerSprint -= estimatedStoryPointsPerDayArray[dayOfWeek];
-
-            // Extra check to make sure we don't end with negative numbers
-            // possibly due to some double to integer conversion
-            if (startDate.compareTo(endDate) == 0) {
-                totalStoryPointsPerSprint = 0;
-            }
 
             // Create burndowData point and add it to ArrayList
             BurndownData burndownData = new BurndownData(startDate, (int) totalStoryPointsPerSprint);
