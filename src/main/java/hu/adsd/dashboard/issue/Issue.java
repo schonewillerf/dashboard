@@ -21,6 +21,15 @@ public class Issue {
 
     private String description;
 
+    private String issueName;
+
+    public String getIssueName() {
+        return issueName;
+    }
+
+    public void setIssueName(String issueName) {
+        this.issueName = issueName;
+    }
 
     public String getDescription() {
         return description;

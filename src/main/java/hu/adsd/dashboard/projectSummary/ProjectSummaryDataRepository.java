@@ -7,6 +7,6 @@ import java.util.List;
 public interface ProjectSummaryDataRepository extends JpaRepository<ProjectSummaryData, Integer> {
 
 
-    List<ProjectSummaryData> findByName (String name);
 
+       ProjectSummaryData findOneByName(String name);
 }

@@ -16,6 +16,12 @@ import java.util.regex.Pattern;
 @Component
 public class JiraClient {
 
+    public static void main(String[] args) {
+
+        getAllIssues();
+
+    }
+
 
     public static int getStatistics (String projectName, String taskName )
     {
@@ -61,10 +67,7 @@ public class JiraClient {
 
        JSONObject resObj=response.getBody().getObject();
        JSONArray issues=resObj.getJSONArray("issues");
-
         //System.out.println(" how much issues? "+ issues.length());
-
-
        for(int i=0; i<issues.length();i++)
        {
            Issue issue=new Issue();
@@ -81,6 +84,21 @@ public class JiraClient {
            issue.setProjectName(projectName);
            String status =fieldsObject.getJSONObject("status").getString("name");
            issue.setIssueStatus(status);
+
+           //String summary=fieldsObject.getString("summary");
+          // System.out.println("summary: "+summary)';
+
+           if ( fieldsObject.isNull("summary"))
+           {
+
+           }
+           else
+           {
+               String issueName=fieldsObject.getString("summary");
+               System.out.println("issueName: "+issueName);
+               issue.setIssueName(issueName);
+           }
+
 
            // check if description not Null Object
 
@@ -101,11 +119,12 @@ public class JiraClient {
                Pattern pattern =Pattern.compile("SP-(\\d*)",Pattern.CASE_INSENSITIVE);
                Matcher matcher=pattern.matcher(desc);
 
-               if(matcher.matches())
+               if(matcher.find())
                {
                    // cut "Sp-" away, save story points as integer
                    int storyPoints=Integer.parseInt(matcher.group().substring(3));
                    issue.setStoryPoints(storyPoints);
+                   //System.out.println("story points: "+storyPoints);
 
                }
 
@@ -133,8 +152,43 @@ public class JiraClient {
            }
        }
 
-       // System.out.println( "size issue list: "+ issueList.size());
         return issueList;
+
+    }
+
+
+    public static  String[] getkeysOfRecentUpdatedIssues()
+    {
+        String query="https://andgreg.atlassian.net/rest/api/2/search?jql=updated%3E=-1w&maxResults=7";
+        JSONObject responseObject=getResponse(query);
+        JSONArray issues=responseObject.getJSONArray("issues");
+        int size=issues.length();
+        String[] keyList=new String[size];
+
+        for (int i=0;i<size; i++)
+        {
+            JSONObject jsonObjectIssues=issues.getJSONObject(i);
+            String issueKey=jsonObjectIssues.getString("key");
+            System.out.println(" key : "+issueKey);
+            keyList[i]=issueKey;
+        }
+
+
+
+        return keyList;
+    }
+
+
+    public static JSONObject getResponse (String query)
+    {
+        kong.unirest.HttpResponse<JsonNode> response = Unirest.get(query)
+                // email and token of Jira account
+                .basicAuth("alenasavachenko3@gmail.com", "XaSvh24eI7ftgqS8gV0q978A")
+                .header("Accept", "application/json")
+                .asJson();
+
+        JSONObject responseObject=response.getBody().getObject();
+        return responseObject;
     }
 
 
