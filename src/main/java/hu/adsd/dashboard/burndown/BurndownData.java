@@ -25,16 +25,11 @@ public class BurndownData {
 
     private int estimatedQuantity;
 
-    // Adds column sentiment_score with default value -1
-    @Column(columnDefinition = "double default -1")
-    private double sentimentScore;
-
     protected BurndownData() { }
 
     public BurndownData(LocalDate date, int estimatedQuantity) {
         this.date = date;
         this.estimatedQuantity = estimatedQuantity;
-        this.sentimentScore = -1;
         this.currentQuantity = -1;
     }
 
@@ -69,15 +64,5 @@ public class BurndownData {
 
     public void setEstimatedQuantity(int estimatedQuantity) {
         this.estimatedQuantity = estimatedQuantity;
-    }
-
-    public double getSentimentScore()
-    {
-        return sentimentScore;
-    }
-
-    public void setSentimentScore( double sentimentScore )
-    {
-        this.sentimentScore = sentimentScore;
     }
 }
