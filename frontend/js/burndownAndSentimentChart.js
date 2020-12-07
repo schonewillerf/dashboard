@@ -22,26 +22,46 @@ Http.onreadystatechange = function () {
 
         // Parse JSON
         var json = JSON.parse(Http.responseText);
+        console.log(json);
 
         // Loop over Indicator Objects
-        for (var i = 0; i < json.length; i++) {
-            var obj = json[i];
+        for (var i = 0; i < json[0].length; i++) {
+            var obj = json[0][i];
 
             var formattedDate = new Date(obj.date);
-            labels.push(formattedDate.getDate() + "-" + formattedDate.getMonth() + "-" + formattedDate.getFullYear());
+            labels.push(formattedDate.getDate() + "-" + (formattedDate.getMonth() + 1) + "-" + formattedDate.getFullYear());
 
             var currentQuantity = obj.currentQuantity;
             var estimatedQuantity = obj.estimatedQuantity;
-            var sentimentScore = obj.sentimentScore;
 
             if (currentQuantity !== -1) {
                 currentQuantityArray.push(currentQuantity);
             }
 
-            // Check if the sentimentScore exists
-            if (sentimentScore !== -1) { sentimentScoreArray.push(sentimentScore); }
-
             estimatedQuantityArray.push(estimatedQuantity);
+        }
+
+        //Loop through dates to see if there is sentiment data
+        for (var j = 0; j < labels.length; j++){
+            var date = labels[j];
+
+            var exists = 0;
+            for (var k = 0; k < json[1].length; k++) {
+                var jsonDate = new Date(json[1][k].date);
+                var jsonFormattedDate = jsonDate.getDate() + "-" + (jsonDate.getMonth() + 1) + "-" + jsonDate.getFullYear()
+
+                if (jsonFormattedDate === date){
+                    console.log("Match");
+                    exists = 1;
+                    sentimentScoreArray.push(json[1][k].averageSentiment);
+                    break;
+                }
+            }
+
+            if(exists === 0){
+                sentimentScoreArray.push(null);
+            }
+
         }
 
         // Area Chart Example
@@ -53,7 +73,7 @@ Http.onreadystatechange = function () {
                 datasets: [{
                     yAxisID: 'A',
                     label: "Actueel",
-                    lineTension: 0.3,
+                    lineTension: 0,
                     backgroundColor: "rgba(78, 115, 223, 0.05)",
                     borderColor: "rgba(78, 115, 223, 1)",
                     pointRadius: 3,
@@ -69,7 +89,7 @@ Http.onreadystatechange = function () {
                 {
                     yAxisID: 'A',
                     label: "Ideaal",
-                    lineTension: 0.3,
+                    lineTension: 0,
                     backgroundColor: "rgba(28, 200, 138, 0.05)",
                     borderColor: "rgba(28, 200, 138, 1)",
                     pointRadius: 3,
@@ -100,15 +120,8 @@ Http.onreadystatechange = function () {
                 }],
             },
             options: {
+                spanGaps: true,
                 maintainAspectRatio: false,
-                layout: {
-                    padding: {
-                        left: 10,
-                        right: 25,
-                        top: 25,
-                        bottom: 0
-                    }
-                },
                 scales: {
                     xAxes: [{
                         time: {
@@ -151,7 +164,7 @@ Http.onreadystatechange = function () {
                         type: 'linear',
                         position: 'right',
                         ticks: {
-                            // Include a dollar sign in the ticks
+                            // Change values to smileys
                             callback: function(value, index, values) {
                                 if (value === 1) {
                                     return "😕";
@@ -166,6 +179,7 @@ Http.onreadystatechange = function () {
                             },
                             steps: 2,
                             stepValue: 1,
+                            min: 1,
                             max: 3,
                             beginAtZero: false,
                             maxTicksLimit: 5,
@@ -178,7 +192,7 @@ Http.onreadystatechange = function () {
                     ],
                 },
                 legend: {
-                    display: false
+                    display: true
                 },
                 tooltips: {
                     backgroundColor: "rgb(255,255,255)",
