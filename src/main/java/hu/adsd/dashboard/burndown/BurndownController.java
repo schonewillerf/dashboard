@@ -2,6 +2,9 @@ package hu.adsd.dashboard.burndown;
 
 import hu.adsd.dashboard.employee.EmployeeData;
 import hu.adsd.dashboard.employee.EmployeeDataRepository;
+import hu.adsd.dashboard.sentiment.DailySentiment;
+import hu.adsd.dashboard.sentiment.DailySentimentRepository;
+import hu.adsd.dashboard.sentiment.SentimentData;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,23 +17,32 @@ public class BurndownController {
 
     private final BurndownDataRepository burndownDataRepository;
     private final EmployeeDataRepository employeeDataRepository;
+    private final DailySentimentRepository dailySentimentRepository;
 
     // Spring Boot will automatically inject these repositories at initialisation
     public BurndownController(
             BurndownDataRepository burndownDataRepository,
-            EmployeeDataRepository employeeDataRepository) {
+            EmployeeDataRepository employeeDataRepository, DailySentimentRepository dailySentimentRepository) {
 
         this.burndownDataRepository = burndownDataRepository;
         this.employeeDataRepository = employeeDataRepository;
+        this.dailySentimentRepository = dailySentimentRepository;
     }
 
     @GetMapping("/burndowndata")
-    public List<BurndownData> getBurndownData() {
+    public Object[] getBurndownData() {
 
         LocalDate date1 = LocalDate.parse("2020-11-30");
         LocalDate date2 = LocalDate.parse("2020-12-11");
 
-        return burndownDataRepository.findAllByDateBetweenOrderByDate(date1, date2);
+        List<BurndownData> sprintBurndown = burndownDataRepository.findAllByDateBetweenOrderByDate(date1, date2);
+        List<DailySentiment> sprintSentiment = dailySentimentRepository.findAllByDateBetweenOrderByDate(date1, date2);
+
+        Object[] jsonResponse = new Object[2];
+        jsonResponse[0] = sprintBurndown;
+        jsonResponse[1] = sprintSentiment;
+
+        return jsonResponse;
     }
 
     @GetMapping("/generateestimatedburndowndata")
