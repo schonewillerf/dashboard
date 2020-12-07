@@ -10,6 +10,8 @@ public interface IssueRepository extends JpaRepository<Issue, Integer>
 
     List<Issue> findByIssueStatusIgnoreCase(String issueStatus);
 
+    public Issue findOneByIssueKeyIgnoreCase(String key);
+
 }
 
 
