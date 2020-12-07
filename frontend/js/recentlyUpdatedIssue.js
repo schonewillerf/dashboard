@@ -31,9 +31,35 @@ HttpUpdates.onreadystatechange = function () {
 
             var elementList=document.createElement("li");
             elementList.classList.add("list-group-item","d-flex","justify-content-between","align-items-center");
-            var elementText=document.createTextNode(sumarryArray[i]);
+
+            var elementP=document.createElement("p");
+            var elementTextSummary=document.createTextNode(sumarryArray[i]);
+            var elementSpanTaskStatus =document.createElement("span");
+
             var elementText2=document.createTextNode("     -    "
-                +statusArray[i]);
+                +statusArray[i].toUpperCase());
+            var taskStatus =statusArray[i].toUpperCase();
+            if(taskStatus=="DONE")
+            {
+                elementSpanTaskStatus.classList.add("green");
+            }
+            else if (taskStatus="DOING")
+            {
+                elementSpanTaskStatus.classList.add("orange");
+            }
+
+            else if (taskStatus="TESTING")
+            {
+                elementSpanTaskStatus.classList.add("yellow");
+            }
+
+
+            elementSpanTaskStatus.appendChild(elementText2);
+
+            elementP.appendChild(elementTextSummary);
+            //elementP.appendChild(elementText2);
+            elementP.appendChild(elementSpanTaskStatus);
+
 
 //  <span class="badge badge-primary badge-pill">14</span>
 
@@ -43,8 +69,9 @@ HttpUpdates.onreadystatechange = function () {
             elementSpan.appendChild(textSP);
 
 
-            elementList.appendChild(elementText);
-            elementList.appendChild(elementText2);
+            //elementList.appendChild(elementTextSummary);
+            //elementList.appendChild(elementText2);
+            elementList.appendChild(elementP);
             elementList.appendChild(elementSpan);
             parentElemet.appendChild(elementList);
 

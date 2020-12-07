@@ -159,7 +159,7 @@ public class JiraClient {
 
     public static  String[] getkeysOfRecentUpdatedIssues()
     {
-        String query="https://andgreg.atlassian.net/rest/api/2/search?jql=updated%3E=-1w&maxResults=7";
+        String query="https://andgreg.atlassian.net/rest/api/2/search?jql=updated%20%3E=%20-1w%20order%20by%20updated%20DESC&maxResults=7";
         JSONObject responseObject=getResponse(query);
         JSONArray issues=responseObject.getJSONArray("issues");
         int size=issues.length();
