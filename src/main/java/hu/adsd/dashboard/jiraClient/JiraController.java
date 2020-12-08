@@ -25,12 +25,7 @@ public class JiraController {
         return client.getStatistics(projectName,replacedTaskName);
     }
 
-    @GetMapping("/refresh")
-    public boolean refreshPage(){
-        //Update data here
 
-        return true;
-    }
 
 
 

@@ -95,16 +95,16 @@ public class IssueController {
     }
 
 
-    //refresh issue table by server start
+    //refresh issue table  by get request
 
-    @EventListener(ApplicationReadyEvent.class)
-    public void refreshDataAfterStartup()
-    {
+    @GetMapping("/refresh")
+    public String refreshPage(){
+        //Update data here
         repository.deleteAll();
         saveAllIssuesToCustomerDb();
-        System.out.println("data refreshed!");
+        System.out.println("data refreshed -from backend!");
+        return "refresh from db";
     }
-
 
 
 
