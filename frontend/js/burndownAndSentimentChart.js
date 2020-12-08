@@ -240,7 +240,6 @@ function parseSentimentData(labels, sentimentData) {
             var jsonFormattedDate = jsonDate.getDate() + "-" + (jsonDate.getMonth() + 1) + "-" + jsonDate.getFullYear()
 
             if (jsonFormattedDate === date){
-                console.log("Match");
                 exists = 1;
                 sentimentScoreArray.push(sentimentData[k].averageSentiment);
                 break;
