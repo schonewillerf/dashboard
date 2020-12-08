@@ -11,6 +11,9 @@ function voteSentiment(vote){
             document.getElementById("vote-block").classList.remove("d-flex");
             document.getElementById("vote-block").classList.add("d-none");
             document.getElementById("sentiment-chart").classList.remove("d-none");
+
+            // Refresh burdown
+            updateBurndownSentiment();
         }
     }
 }
