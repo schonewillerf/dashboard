@@ -49,4 +49,14 @@ public class SentimentController {
 
         return sentimentDataRepository.countSentimentByValue(formattedDate);
     }
+
+    @GetMapping("/sentimentdailychart")
+    public List<DailySentiment> getDailySentiment() {
+
+        // Will be dynamic at some point
+        LocalDate startDate = LocalDate.parse("2020-11-30");
+        LocalDate endDate = LocalDate.parse("2020-12-11");
+
+        return dailySentimentRepository.findAllByDateBetweenOrderByDate( startDate, endDate );
+    }
 }

@@ -8,6 +8,33 @@ const url = 'http://localhost:8080/burndowndata';
 Http.open("GET", url);
 Http.send();
 
+// Local variable for burndownChart
+var burndownChart;
+
+// Update method
+function updateBurndownSentiment() {
+    const labels = burndownChart.data.labels;
+
+    //Send HTTP request
+    const Http = new XMLHttpRequest();
+    const url = 'http://localhost:8080/sentimentdailychart';
+    Http.open("GET", url);
+    Http.send();
+
+    //Wait for HTTP response
+    Http.onreadystatechange = function () {
+
+        // Typical action to be performed when the document is ready:
+        if (this.readyState == 4 && this.status == 200) {
+            const json = JSON.parse(Http.responseText);
+
+            // Update Sentiment Dataset
+            burndownChart.data.datasets[2].data = parseSentimentData(labels, json);
+            burndownChart.update();
+        }
+    }
+}
+
 //Wait for HTTP response
 Http.onreadystatechange = function () {
 
@@ -15,14 +42,13 @@ Http.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
 
         // Variables
-        var labels = new Array();
-        var currentQuantityArray = new Array();
-        var estimatedQuantityArray = new Array();
-        var sentimentScoreArray = [];
+        var labels = [];
+        var currentQuantityArray = [];
+        var estimatedQuantityArray = [];
+        var sentimentScoreArray;
 
         // Parse JSON
         var json = JSON.parse(Http.responseText);
-        console.log(json);
 
         // Loop over Indicator Objects
         for (var i = 0; i < json[0].length; i++) {
@@ -41,32 +67,13 @@ Http.onreadystatechange = function () {
             estimatedQuantityArray.push(estimatedQuantity);
         }
 
-        //Loop through dates to see if there is sentiment data
-        for (var j = 0; j < labels.length; j++){
-            var date = labels[j];
+        sentimentScoreArray = parseSentimentData(labels, json[1]);
 
-            var exists = 0;
-            for (var k = 0; k < json[1].length; k++) {
-                var jsonDate = new Date(json[1][k].date);
-                var jsonFormattedDate = jsonDate.getDate() + "-" + (jsonDate.getMonth() + 1) + "-" + jsonDate.getFullYear()
 
-                if (jsonFormattedDate === date){
-                    console.log("Match");
-                    exists = 1;
-                    sentimentScoreArray.push(json[1][k].averageSentiment);
-                    break;
-                }
-            }
-
-            if(exists === 0){
-                sentimentScoreArray.push(null);
-            }
-
-        }
 
         // Area Chart Example
-        var ctx = document.getElementById("myAreaChart");
-        var myLineChart = new Chart(ctx, {
+        let ctx = document.getElementById("myAreaChart");
+        burndownChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: labels,
@@ -219,4 +226,32 @@ Http.onreadystatechange = function () {
         });
     }
 };
+
+function parseSentimentData(labels, sentimentData) {
+    //Loop through dates to see if there is sentiment data
+    let sentimentScoreArray = [];
+
+    for (var j = 0; j < labels.length; j++){
+        var date = labels[j];
+
+        var exists = 0;
+        for (var k = 0; k < sentimentData.length; k++) {
+            var jsonDate = new Date(sentimentData[k].date);
+            var jsonFormattedDate = jsonDate.getDate() + "-" + (jsonDate.getMonth() + 1) + "-" + jsonDate.getFullYear()
+
+            if (jsonFormattedDate === date){
+                console.log("Match");
+                exists = 1;
+                sentimentScoreArray.push(sentimentData[k].averageSentiment);
+                break;
+            }
+        }
+        if(exists === 0){
+            sentimentScoreArray.push(null);
+        }
+    }
+
+    return sentimentScoreArray;
+}
+
 
