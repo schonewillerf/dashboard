@@ -4,7 +4,6 @@ import hu.adsd.dashboard.employee.EmployeeData;
 import hu.adsd.dashboard.employee.EmployeeDataRepository;
 import hu.adsd.dashboard.sentiment.DailySentiment;
 import hu.adsd.dashboard.sentiment.DailySentimentRepository;
-import hu.adsd.dashboard.sentiment.SentimentData;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,7 +13,7 @@ import java.util.List;
 
 @RestController
 public class BurndownController {
-
+    // Repositories
     private final BurndownDataRepository burndownDataRepository;
     private final EmployeeDataRepository employeeDataRepository;
     private final DailySentimentRepository dailySentimentRepository;
@@ -22,8 +21,9 @@ public class BurndownController {
     // Spring Boot will automatically inject these repositories at initialisation
     public BurndownController(
             BurndownDataRepository burndownDataRepository,
-            EmployeeDataRepository employeeDataRepository, DailySentimentRepository dailySentimentRepository) {
-
+            EmployeeDataRepository employeeDataRepository,
+            DailySentimentRepository dailySentimentRepository
+    ) {
         this.burndownDataRepository = burndownDataRepository;
         this.employeeDataRepository = employeeDataRepository;
         this.dailySentimentRepository = dailySentimentRepository;
@@ -31,13 +31,14 @@ public class BurndownController {
 
     @GetMapping("/burndowndata")
     public Object[] getBurndownData() {
-
+        // Meant to be generated externally in future
         LocalDate date1 = LocalDate.parse("2020-11-30");
         LocalDate date2 = LocalDate.parse("2020-12-11");
 
         List<BurndownData> sprintBurndown = burndownDataRepository.findAllByDateBetweenOrderByDate(date1, date2);
         List<DailySentiment> sprintSentiment = dailySentimentRepository.findAllByDateBetweenOrderByDate(date1, date2);
 
+        // Prepare JSON response object consisting of two arrays
         Object[] jsonResponse = new Object[2];
         jsonResponse[0] = sprintBurndown;
         jsonResponse[1] = sprintSentiment;
@@ -45,6 +46,7 @@ public class BurndownController {
         return jsonResponse;
     }
 
+    // should actually be a PUT or POST request
     @GetMapping("/generateestimatedburndowndata")
     public void generateEstimatedBurndownData() {
 
@@ -82,6 +84,7 @@ public class BurndownController {
             totalWorkingHoursPerDay[4] += developer.getWorkingHoursFr();
         }
 
+        // Calculate total hours in sprint
         for ( LocalDate sprintDay : new SprintIterator( startDateString, endDateString ))
         {
             int dayIndex = sprintDay.getDayOfWeek().getValue() - 1;

@@ -6,19 +6,20 @@ import java.time.LocalDate;
 @Entity
 public class DailySentiment
 {
+    // Properties
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY )
     int id;
-
+    //
     @Column(columnDefinition = "date")
     private LocalDate date;
-
+    //
     private double averageSentiment;
 
-    protected DailySentiment()
-    {
-    }
+    // Empty Constructor for JPA
+    protected DailySentiment() {}
 
+    // Getters and Setters
     public DailySentiment( LocalDate date )
     {
         this.date = date;

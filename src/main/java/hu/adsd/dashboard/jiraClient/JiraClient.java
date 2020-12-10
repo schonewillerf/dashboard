@@ -50,7 +50,6 @@ public class JiraClient {
 
     //https://andgreg.atlassian.net/rest/api/2/search?
     // search for all issues  of all the projects is Jira
-
     public static List<Issue> getAllIssues()
     {
 
@@ -95,7 +94,7 @@ public class JiraClient {
            else
            {
                String issueName=fieldsObject.getString("summary");
-               System.out.println("issueName: "+issueName);
+               // System.out.println("issueName: "+issueName);
                issue.setIssueName(issueName);
            }
 
@@ -172,8 +171,6 @@ public class JiraClient {
             System.out.println(" key : "+issueKey);
             keyList[i]=issueKey;
         }
-
-
 
         return keyList;
     }

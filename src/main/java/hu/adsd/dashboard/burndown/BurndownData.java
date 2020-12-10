@@ -9,24 +9,27 @@ import java.util.Date;
  */
 @Entity
 public class BurndownData {
-
+    // Properties
+    //
     // Adds column id with PK, AI
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
+    //
     // Adds column date, current_quantity
     @Column(columnDefinition = "date")
     private LocalDate date;
-
+    //
     // Adds column current_quantity with default value -1
     @Column(columnDefinition = "integer default -1")
     private int currentQuantity;
-
+    //
     private int estimatedQuantity;
 
+    // Protected Emptyy constructor is required by JPA
     protected BurndownData() { }
 
+    // Other Constructor
     public BurndownData(LocalDate date, int estimatedQuantity) {
         this.date = date;
         this.estimatedQuantity = estimatedQuantity;

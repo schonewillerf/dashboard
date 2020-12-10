@@ -7,12 +7,14 @@ import javax.persistence.Id;
 
 @Entity
 public class TopContributorData {
+    // Properties
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     private int storyPoints;
 
+    // Getters and Setters
     public int getId() {
         return id;
     }

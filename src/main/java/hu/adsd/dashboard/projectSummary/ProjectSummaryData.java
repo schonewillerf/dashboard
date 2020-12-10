@@ -7,6 +7,7 @@ import javax.persistence.Id;
 
 @Entity
 public class ProjectSummaryData {
+    // Properties
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -14,6 +15,7 @@ public class ProjectSummaryData {
     private int storyPoints;
     private int items;
 
+    // Getters and Setters
     public int getId() {
         return id;
     }

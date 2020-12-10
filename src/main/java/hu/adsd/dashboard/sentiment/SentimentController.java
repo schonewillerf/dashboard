@@ -10,14 +10,15 @@ import java.util.List;
 
 @RestController
 public class SentimentController {
-
+    // Properties
     private final SentimentDataRepository sentimentDataRepository;
     private final DailySentimentRepository dailySentimentRepository;
 
+    // Constructor
     public SentimentController(
             SentimentDataRepository sentimentDataRepository,
-            DailySentimentRepository dailySentimentRepository ) {
-
+            DailySentimentRepository dailySentimentRepository
+    ) {
         this.sentimentDataRepository = sentimentDataRepository;
         this.dailySentimentRepository = dailySentimentRepository;
     }
@@ -37,15 +38,15 @@ public class SentimentController {
 
         // Update average vote in dailySentiment
         double averageSentiment = sentimentDataRepository.calculateAverageSentiment( formattedDate );
-        System.out.println("average sentiment" + averageSentiment);
 
+        // Use Optional with DailySentiment
+        // Shorter syntax
         DailySentiment dailySentiment = dailySentimentRepository
                 .findByDate( formattedDate )
                 .orElse( new DailySentiment(formattedDate) );
 
         dailySentiment.setAverageSentiment( averageSentiment );
         dailySentimentRepository.save( dailySentiment );
-
 
         return sentimentDataRepository.countSentimentByValue(formattedDate);
     }

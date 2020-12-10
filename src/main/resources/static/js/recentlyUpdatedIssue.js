@@ -9,7 +9,7 @@ HttpUpdates.open("GET", urlUpdates );
 HttpUpdates.send();
 
 HttpUpdates.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
+    if (this.readyState === 4 && this.status === 200) {
 
         var json = JSON.parse(HttpUpdates.responseText);
         //console.log("response: ", json);
@@ -67,29 +67,14 @@ HttpUpdates.onreadystatechange = function () {
             elementSpan.classList.add("badge","badge-primary","badge-pill");
             var textSP=document.createTextNode(spArray[i]);
             elementSpan.appendChild(textSP);
-
-
-            //elementList.appendChild(elementTextSummary);
-            //elementList.appendChild(elementText2);
             elementList.appendChild(elementP);
             elementList.appendChild(elementSpan);
             parentElemet.appendChild(elementList);
-
-       // <li class="list-group-item d-flex justify-content-between align-items-center">
-
-
-
-
         }
-
-
-
     }
 }
 
-
 // function to refresh proejct summary table
-
 function refreshProjectSummaryTable()
 {
     var updates=["doing", "done", "testing", "sprint%20backlog"];
@@ -104,6 +89,4 @@ function refreshProjectSummaryTable()
         requestRefresh.send();
 
     }
-
-
 }
