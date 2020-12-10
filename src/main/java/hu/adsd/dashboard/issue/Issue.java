@@ -7,7 +7,7 @@ import javax.persistence.Id;
 
 @Entity
 public class Issue {
-
+    // Properties
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
@@ -18,11 +18,10 @@ public class Issue {
     private int storyPoints;
     private String projectName;
     private String projectKey;
-
     private String description;
-
     private String issueName;
 
+    // Getters and Setters
     public String getIssueName() {
         return issueName;
     }

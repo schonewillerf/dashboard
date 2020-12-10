@@ -9,23 +9,23 @@ import java.time.LocalDate;
 @Entity
 public class SentimentData
 {
+    // Properties
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY )
     private int id;
     private LocalDate date;
     private int value;
 
-    public SentimentData()
-    {
-    }
+    // Empty Constructor for JPA
+    protected SentimentData() {}
 
     public SentimentData( int value )
     {
-        LocalDate formattedDate = LocalDate.now();
-        this.date = formattedDate;
+        this.date = LocalDate.now();
         this.value = value;
     }
 
+    // Getters and Setters
     public int getId()
     {
         return id;

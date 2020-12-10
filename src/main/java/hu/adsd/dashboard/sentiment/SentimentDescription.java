@@ -4,11 +4,13 @@ import javax.persistence.*;
 
 @Entity
 public class SentimentDescription {
+    // Properties
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String description;
 
+    // Getters and Setters
     public int getId() {
         return id;
     }

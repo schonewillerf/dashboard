@@ -7,8 +7,10 @@ import java.util.List;
 
 @RestController
 public class TopContributorController {
+    // Properties
     private final TopContributorDataRepository topContributorDataRepository;
 
+    // Constructor
     public TopContributorController(TopContributorDataRepository topContributorDataRepository) {
         this.topContributorDataRepository = topContributorDataRepository;
     }

@@ -8,7 +8,6 @@ import java.util.Date;
  */
 @Entity
 public class EmployeeData {
-
     // Adds column id with PK, AI
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -105,7 +104,4 @@ public class EmployeeData {
         this.workingHoursFr = workingHoursFr;
     }
 
-    public int getTotalWorkingHours() {
-        return (workingHoursMo + workingHoursTu + workingHoursWe + workingHoursTh + workingHoursFr) * 2;
-    }
 }
