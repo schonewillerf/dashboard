@@ -94,7 +94,6 @@ public class IssueController {
         //Update data here
         repository.deleteAll();
         saveAllIssuesToCustomerDb();
-        ArrayList<String> updates = new ArrayList<>();
         serviceLayerJira.upadteProjectSummaryData();
         return "db refreshed";
     }
