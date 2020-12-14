@@ -97,4 +97,6 @@ public class IssueController {
         serviceLayerJira.upadteProjectSummaryData();
         return "db refreshed";
     }
+
+
 }

@@ -1,4 +1,7 @@
+launchModal();
+
 function voteSentiment(vote){
+
     //Send HTTP request
     const Http = new XMLHttpRequest();
     const url = 'http://localhost:8080/sentimentdata/' + vote;
@@ -16,4 +19,14 @@ function voteSentiment(vote){
             updateBurndownSentiment();
         }
     }
+}
+
+
+//launch modal by applictaion start
+function launchModal()
+{
+    $(window).on('load',function(){
+        $('#voteModal').modal('show');
+
+    });
 }
