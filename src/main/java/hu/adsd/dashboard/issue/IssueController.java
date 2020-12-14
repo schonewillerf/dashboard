@@ -1,6 +1,7 @@
 package hu.adsd.dashboard.issue;
 
 import hu.adsd.dashboard.jiraClient.JiraClient;
+import hu.adsd.dashboard.jiraClient.ServiceLayerJira;
 import hu.adsd.dashboard.projectSummary.ProjectSummaryData;
 import hu.adsd.dashboard.projectSummary.ProjectSummaryDataRepository;
 import org.springframework.web.bind.annotation.*;
@@ -14,17 +15,19 @@ public class IssueController {
     private final IssueRepository repository;
     private final JiraClient  client;
     private final ProjectSummaryDataRepository projectSummaryDataRepository;
+    private  final ServiceLayerJira serviceLayerJira;
 
     // Constructor
     public IssueController(
             IssueRepository repository,
             JiraClient client,
-            ProjectSummaryDataRepository projectSummaryDataRepository
-    )
+            ProjectSummaryDataRepository projectSummaryDataRepository,
+            ServiceLayerJira serviceLayerJira)
     {
         this.repository = repository;
         this.client = client;
         this.projectSummaryDataRepository = projectSummaryDataRepository;
+        this.serviceLayerJira = serviceLayerJira;
     }
 
     // save all the items from all existing projects of Jira  in db
@@ -74,7 +77,7 @@ public class IssueController {
     public List<Issue> getUpdatedTasks()
     {
         List<Issue> issues=new ArrayList<>();
-        String[] keys=JiraClient.getkeysOfRecentUpdatedIssues();
+        String[] keys=JiraClient.getkeysOfRecentUpdatedIssues("1w",7);
 
         for(int i=0; i<keys.length; i++)
         {
@@ -91,7 +94,7 @@ public class IssueController {
         //Update data here
         repository.deleteAll();
         saveAllIssuesToCustomerDb();
-
-        return "refresh from db";
+        serviceLayerJira.upadteProjectSummaryData();
+        return "db refreshed";
     }
 }

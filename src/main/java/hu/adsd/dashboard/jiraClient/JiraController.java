@@ -28,4 +28,6 @@ public class JiraController {
 
         return client.getStatistics(projectName,replacedTaskName);
     }
+
+           //ServiceLayerJira.upadteProjectSummaryData();
 }
