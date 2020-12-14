@@ -61,8 +61,9 @@ httpGetAsync('http://localhost:8080/getUpdatedTasks', 'GET', function (result){
     }
 });
 
-// function to refresh proejct summary table
-function refreshProjectSummaryTable()
+
+// create list group dynamic
+function createList(storyPoints, statusArr, SummaryArr)
 {
     const updates = ["doing", "done", "testing", "sprint%20backlog"];
 
@@ -75,4 +76,16 @@ function refreshProjectSummaryTable()
         requestRefresh.open("GET", requestUpdateUri);
         requestRefresh.send();
     }
+
+
+    elementSpanTaskStatus.appendChild(elementText2);
+    elementP.appendChild(elementTextSummary);
+    elementP.appendChild(elementSpanTaskStatus);
+    var elementSpan=document.createElement("span");
+    elementSpan.classList.add("badge","badge-primary","badge-pill");
+    var textSP=document.createTextNode(storyPoints);
+    elementSpan.appendChild(textSP);
+    elementList.appendChild(elementP);
+    elementList.appendChild(elementSpan);
+    parentElemet.appendChild(elementList);
 }
