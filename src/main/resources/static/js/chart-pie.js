@@ -5,8 +5,8 @@ Chart.defaults.global.defaultFontColor = '#858796';
 
 function displaySentimentChart(values, names) {
     // Pie Chart Example
-    var ctx = document.getElementById("sentimentPieChart");
-    var myPieChart = new Chart(ctx, {
+    const ctx = document.getElementById("sentimentPieChart");
+    const myPieChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels: names,
