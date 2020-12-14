@@ -1,9 +1,3 @@
-//  <li class="list-group-item d-flex justify-content-between align-items-center">
-
-//get array from backend
-
-refreshProjectSummaryTable();
-
 httpGetAsync('http://localhost:8080/getUpdatedTasks', 'GET', function (result){
     const json = JSON.parse(result);
     const sumarryArray = [];
