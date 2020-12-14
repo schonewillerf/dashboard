@@ -2,30 +2,21 @@
 var request = new XMLHttpRequest();
 var city = "Amersfoort";
 var apiKey = "3a7724b5c33a53b756d9aaeb997c3527";
-var requestUri = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=" + apiKey;
 
-request.open("GET", requestUri);
-request.send();
-
-// Wait for HTTP response
-request.onreadystatechange = function () {
-
-    // Typical action to be performed when the document is ready:
-    if (this.readyState === 4 && this.status === 200) {
-        var obj = JSON.parse(request.responseText);
-        getImgSrc(obj);
-        getDataFromApi(obj);
-        getCity(obj);
-    }
-}
+httpGetAsync("http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=" + apiKey, 'GET', function (result){
+    var obj = JSON.parse(result);
+    getImgSrc(obj);
+    getDataFromApi(obj);
+    getCity(obj);
+});
 
 // Set image src in html
 function getImgSrc(responseObject) {
-    var weather = responseObject.weather;
-    var objectWeather = weather[0];
-    var id = objectWeather.id;
-    var imgCode = getImageCode(id);
-    var imgSrc = "http://openweathermap.org/img/wn/" + imgCode + "@4x.png";
+    const weather = responseObject.weather;
+    const objectWeather = weather[0];
+    const id = objectWeather.id;
+    const imgCode = getImageCode(id);
+    const imgSrc = "http://openweathermap.org/img/wn/" + imgCode + "@4x.png";
     document.getElementById("weerImg").style.backgroundImage = 'url(' + imgSrc + ')';
 
 }
@@ -60,22 +51,22 @@ function getImageCode(id) {
 
 // Get temperatures, wind speed and humidity
 function getDataFromApi(obj) {
-    var objMain = obj.main;
-    var items = Object.keys(objMain);
+    const objMain = obj.main;
+    const items = Object.keys(objMain);
 
     items.map(key => {
 
         // Temperature
-        var temp = Math.round(objMain.temp - 273);
+        const temp = Math.round(objMain.temp - 273);
         document.getElementById("temp").textContent = temp + "℃";
 
         // Wind speed
-        var wind = obj.wind;
-        var windSpeed = wind.speed;
+        const wind = obj.wind;
+        const windSpeed = wind.speed;
         document.getElementById("windSpeed").textContent = windSpeed + "m/s";
 
         // Humidity
-        var humidity = objMain.humidity;
+        const humidity = objMain.humidity;
         document.getElementById("airHumidity").textContent = humidity + "%";
     });
 }

@@ -55,8 +55,8 @@ public class SentimentController {
     public List<DailySentiment> getDailySentiment() {
 
         // Will be dynamic at some point
-        LocalDate startDate = LocalDate.parse("2020-11-30");
-        LocalDate endDate = LocalDate.parse("2020-12-11");
+        LocalDate startDate = LocalDate.parse("2020-12-14");
+        LocalDate endDate = LocalDate.parse("2020-12-25");
 
         return dailySentimentRepository.findAllByDateBetweenOrderByDate( startDate, endDate );
     }

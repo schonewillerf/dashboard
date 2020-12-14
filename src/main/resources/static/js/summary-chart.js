@@ -4,23 +4,23 @@ Chart.defaults.global.defaultFontColor = '#858796';
 
 function summaryChart(json){
   //Loop though data and make arrays
-  var values = new Array();
-  var maxValue = 0;
+  const values = [];
+  let maxValue = 0;
 
-  for (var i = 0; i < json.length; i++) {
-    var obj = json[i];
+  for (let i = 0; i < json.length; i++) {
+    const obj = json[i];
     values.push(obj.storyPoints);
   }
 
   maxValue = Math.max.apply(Math, values);
 
   //Custom bar colors
-  var myColorsArray = ["#e74a3b", "#fd7e14", "#f6c23e", "#1cc88a"];
-  var myHoverColorsArray = ["rgba(231, 74, 59, 0.7)", "rgba(253, 126, 20, 0.7)", "rgba(246, 194, 62, 0.7)", "rgba(28, 200, 138, 0.7)"];
+  const myColorsArray = ["#e74a3b", "#fd7e14", "#f6c23e", "#1cc88a"];
+  const myHoverColorsArray = ["rgba(231, 74, 59, 0.7)", "rgba(253, 126, 20, 0.7)", "rgba(246, 194, 62, 0.7)", "rgba(28, 200, 138, 0.7)"];
 
   // Summary bar chart
-  var ctx = document.getElementById("summaryChart");
-  var myBarChart = new Chart(ctx, {
+  const ctx = document.getElementById("summaryChart");
+  const myBarChart = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: ["", "", "", ""],
