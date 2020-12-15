@@ -23,15 +23,10 @@ public class ServiceLayerJira {
     }
 
 
-    public String upadteProjectSummaryData()
+    public String upadteProjectSummaryData(ArrayList arrayStatusToUpdate)
     {
         projectSummaryDataRepository.deleteAll();
-        List<String> arrayStatus=new ArrayList();
-        arrayStatus.add("sprint backlog");
-        arrayStatus.add("doing");
-        arrayStatus.add("testing");
-        arrayStatus.add("done");
-
+        List<String> arrayStatus= arrayStatusToUpdate;
         //update existing table with summary data
         for (String varStatus : arrayStatus)
         {

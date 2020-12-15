@@ -1,3 +1,5 @@
+launchModal();
+
 function voteSentiment(vote){
     httpGetAsync('http://localhost:8080/sentimentdata/' + vote, 'POST', function (){
         getSentimentData();
@@ -7,5 +9,14 @@ function voteSentiment(vote){
 
         // Refresh burdown
         updateBurndownSentiment();
+    });
+}
+
+//launch modal by applictaion start
+function launchModal()
+{
+    $(window).on('load',function(){
+        $('#voteModal').modal('show');
+
     });
 }

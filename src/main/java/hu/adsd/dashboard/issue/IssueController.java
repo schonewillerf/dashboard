@@ -94,7 +94,15 @@ public class IssueController {
         //Update data here
         repository.deleteAll();
         saveAllIssuesToCustomerDb();
-        serviceLayerJira.upadteProjectSummaryData();
+
+        ArrayList<String> arrayStatusToBeUpdated=new ArrayList();
+        arrayStatusToBeUpdated.add("sprint backlog");
+        arrayStatusToBeUpdated.add("doing");
+        arrayStatusToBeUpdated.add("testing");
+        arrayStatusToBeUpdated.add("done");
+        serviceLayerJira.upadteProjectSummaryData(arrayStatusToBeUpdated);
         return "db refreshed";
     }
+
+
 }
