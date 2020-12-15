@@ -4,11 +4,11 @@ Chart.defaults.global.defaultFontColor = '#858796';
 
 function summaryChart(json){
   //Loop though data and make arrays
-  var values = [];
-  var myColorsArray = ["#e74a3b", "#fd7e14", "#f6c23e", "#1cc88a"];
+  const values = [];
+  const myColorsArray = ["#e74a3b", "#fd7e14", "#f6c23e", "#1cc88a"];
 
-  for (var i = 0; i < json.length; i++) {
-    var obj = json[i];
+  for (let i = 0; i < json.length; i++) {
+    const obj = json[i];
     values.push({
       label: obj.name,
       backgroundColor: myColorsArray[i],
@@ -17,7 +17,7 @@ function summaryChart(json){
     })
   }
 
-  var ctx = document.getElementById("summaryChart");
+  const ctx = document.getElementById("summaryChart");
   new Chart(ctx, {
     type: 'horizontalBar',
     data: {
@@ -52,6 +52,9 @@ function summaryChart(json){
       legend: {
         display: false
       },
+      tooltips: {
+        enabled: false
+      }
     }
   });
 }
