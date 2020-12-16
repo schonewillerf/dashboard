@@ -7,7 +7,9 @@ import hu.adsd.dashboard.projectSummary.ProjectSummaryDataRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class IssueController {
@@ -91,18 +93,35 @@ public class IssueController {
     //refresh issue table  by get request
     @GetMapping("/refresh")
     public String refreshPage() {
-        //Update data here
-        repository.deleteAll();
-        saveAllIssuesToCustomerDb();
 
-        ArrayList<String> arrayStatusToBeUpdated=new ArrayList();
-        arrayStatusToBeUpdated.add("sprint backlog");
-        arrayStatusToBeUpdated.add("doing");
-        arrayStatusToBeUpdated.add("testing");
-        arrayStatusToBeUpdated.add("done");
-        serviceLayerJira.upadteProjectSummaryData(arrayStatusToBeUpdated);
+        // Get all issues from Jira
+        List<Issue> allIssues= JiraClient.getAllIssues();
+
+        // Create ArrayList to store issue status totals
+        List<ProjectSummaryData> summaryData = new ArrayList<>();
+
+        // Loop over each issue to get totals per category
+        for (Issue issue : allIssues) {
+
+            // Create new ProjectSummaryData for current issue
+            ProjectSummaryData currentIssueData = new ProjectSummaryData(issue.getIssueStatus());
+
+            // Check if current issue already in summaryData
+            if (summaryData.contains(currentIssueData)) {
+                currentIssueData = summaryData.get(summaryData.indexOf(currentIssueData));
+            }
+
+            // Increment No. of items and storypoints
+            currentIssueData.incrementItems();
+            currentIssueData.incrementStoryPoints(issue.getStoryPoints());
+
+            summaryData.add(currentIssueData);
+        }
+
+        // Save totals to DB
+        projectSummaryDataRepository.deleteAll();
+        projectSummaryDataRepository.saveAll(summaryData);
+
         return "db refreshed";
     }
-
-
 }
