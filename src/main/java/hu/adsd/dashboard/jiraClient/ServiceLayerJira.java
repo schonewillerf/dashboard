@@ -37,10 +37,9 @@ public class ServiceLayerJira {
             for (Issue issue:list)
             { storyPoint+=issue.getStoryPoints();
             }
-            ProjectSummaryData projectSummaryData=new ProjectSummaryData();
+            ProjectSummaryData projectSummaryData=new ProjectSummaryData(varStatus);
             projectSummaryData.setStoryPoints(storyPoint);
             projectSummaryData.setItems(items);
-            projectSummaryData.setName(varStatus);
 
             projectSummaryDataRepository.save(projectSummaryData);
         }
