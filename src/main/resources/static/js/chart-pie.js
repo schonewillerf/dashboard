@@ -2,11 +2,34 @@
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
 
+let myPieChart;
+
+// Update method
+function updateSentimentChart() {
+    httpGetAsync('http://localhost:8080/sentimentdata', 'GET', function (result){
+        const json = JSON.parse(result);
+        const values = [];
+        const names = [];
+
+        for (let i = 0; i < json.length; i++) {
+            const obj = json[i];
+            values.push(obj[1]);
+            names.push(obj[0]);
+        }
+
+        try {
+            // Update Sentiment Dataset
+            myPieChart.data.datasets[0].data = values;
+            myPieChart.data.labels = names;
+            myPieChart.update();
+        }catch (error){}
+    });
+}
 
 function displaySentimentChart(values, names) {
     // Pie Chart Example
     const ctx = document.getElementById("sentimentPieChart");
-    const myPieChart = new Chart(ctx, {
+    myPieChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels: names,

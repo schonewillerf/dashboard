@@ -3,9 +3,9 @@ Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,Bli
 Chart.defaults.global.defaultFontColor = '#858796';
 
 // Local variable for burndownChart
-var burndownChart;
+let burndownChart;
 
-// Update method
+// Update sentiment in BurndownChart
 function updateBurndownSentiment() {
     const labels = burndownChart.data.labels;
 
@@ -14,6 +14,37 @@ function updateBurndownSentiment() {
 
         // Update Sentiment Dataset
         burndownChart.data.datasets[2].data = parseSentimentData(labels, json);
+        burndownChart.update();
+    });
+}
+
+//Update Burndownchart
+function updateBurndown(){
+    httpGetAsync('http://localhost:8080/burndowndata', 'GET', function (result) {
+        const currentQuantityArray = [];
+        const estimatedQuantityArray = [];
+
+        // Parse JSON
+        const json = JSON.parse(result);
+
+        // Loop over Indicator Objects
+        for (let i = 0; i < json[0].length; i++) {
+            const obj = json[0][i];
+
+            const currentQuantity = obj.currentQuantity;
+            const estimatedQuantity = obj.estimatedQuantity;
+
+            if (currentQuantity !== -1) {
+                currentQuantityArray.push(currentQuantity);
+            }
+
+            estimatedQuantityArray.push(estimatedQuantity);
+        }
+
+        // Update Dataseta
+        burndownChart.data.datasets[0].data = currentQuantityArray;
+        burndownChart.data.datasets[1].data = estimatedQuantityArray;
+
         burndownChart.update();
     });
 }
@@ -27,7 +58,6 @@ httpGetAsync('http://localhost:8080/burndowndata', 'GET', function (result){
 
     // Parse JSON
     const json = JSON.parse(result);
-    console.log(result);
 
     // Loop over Indicator Objects
     for (let i = 0; i < json[0].length; i++) {

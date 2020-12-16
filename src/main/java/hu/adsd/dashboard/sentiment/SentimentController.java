@@ -1,5 +1,6 @@
 package hu.adsd.dashboard.sentiment;
 
+import hu.adsd.dashboard.webSocket.WebSocket;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,6 +48,9 @@ public class SentimentController {
 
         dailySentiment.setAverageSentiment( averageSentiment );
         dailySentimentRepository.save( dailySentiment );
+
+        WebSocket webSocket = new WebSocket();
+        webSocket.sendMessage("updateSentiment");
 
         return sentimentDataRepository.countSentimentByValue(formattedDate);
     }
