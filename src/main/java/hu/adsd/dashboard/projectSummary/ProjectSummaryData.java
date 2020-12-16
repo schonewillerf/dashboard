@@ -15,6 +15,31 @@ public class ProjectSummaryData {
     private int storyPoints;
     private int items;
 
+    // Protected Constructor for JPA
+    protected ProjectSummaryData() {}
+
+    // Custom Constructor
+    public ProjectSummaryData(String name) {
+        this.name = name;
+    }
+
+    // Compare Data for Equality
+    //
+    // Objects with same name are equal
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if ((obj instanceof ProjectSummaryData) == false) return false;
+
+        return this.name.equals(((ProjectSummaryData) obj).getName());
+    }
+    //
+    // Should implement hashCode() if equals() is implemented
+    @Override
+    public int hashCode() {
+        return this.getName().hashCode();
+    }
+
     // Getters and Setters
     public int getId() {
         return id;
@@ -47,4 +72,13 @@ public class ProjectSummaryData {
     public void setItems(int items) {
         this.items = items;
     }
+
+    // Increment Methods
+	public void incrementItems() {
+        this.items += 1;
+	}
+
+	public void incrementStoryPoints(int storyPoints2) {
+        this.storyPoints += storyPoints2;
+	}
 }

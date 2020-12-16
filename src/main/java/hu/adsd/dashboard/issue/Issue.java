@@ -54,6 +54,12 @@ public class Issue {
         this.issueKey = issueKey;
     }
 
+    /**
+     * Status as in column in ScrumBoard
+     * such as: "To Do", "Doing" or "Done"
+     * 
+     * @return String issueStatus
+     */
     public String getIssueStatus() {
         return issueStatus;
     }
