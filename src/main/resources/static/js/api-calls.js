@@ -14,8 +14,8 @@ function httpGetAsync(theUrl, method, callback)
 function getSentimentData() {
     httpGetAsync('http://localhost:8080/sentimentdata', 'GET', function (result){
         const json = JSON.parse(result);
-        const values = new Array();
-        const names = new Array();
+        const values = [];
+        const names = [];
 
         for (let i = 0; i < json.length; i++) {
             const obj = json[i];

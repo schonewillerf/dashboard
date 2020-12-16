@@ -5,6 +5,7 @@ import hu.adsd.dashboard.projectSummary.ProjectSummaryData;
 import hu.adsd.dashboard.projectSummary.ProjectSummaryDataRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

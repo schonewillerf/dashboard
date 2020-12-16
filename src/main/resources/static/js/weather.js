@@ -3,12 +3,22 @@ var request = new XMLHttpRequest();
 var city = "Amersfoort";
 var apiKey = "3a7724b5c33a53b756d9aaeb997c3527";
 
-httpGetAsync("http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=" + apiKey, 'GET', function (result){
-    var obj = JSON.parse(result);
-    getImgSrc(obj);
-    getDataFromApi(obj);
-    getCity(obj);
-});
+function getWeatherFromApi(){
+    httpGetAsync("http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=" + apiKey, 'GET', function (result){
+        var obj = JSON.parse(result);
+        getImgSrc(obj);
+        getDataFromApi(obj);
+        getCity(obj);
+    });
+}
+
+// First Api call
+getWeatherFromApi();
+
+setInterval(function(){
+    //this code runs every 30 minutes
+    getWeatherFromApi();
+}, 1800000);
 
 // Set image src in html
 function getImgSrc(responseObject) {
