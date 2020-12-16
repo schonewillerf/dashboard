@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Testing websockets</title>
+</head>
+<body>
+<div>
+    <input id="inputmessage" type="text" />
+</div>
+<div>
+    <input type="submit" value="Broadcast message" onclick="send()" />
+    <br><br>
+    Update sentiment: updateSentiment <br>
+    Update burndownchart: updateBurndown
+</div>
+<div id="messages"></div>
+<script type="text/javascript">
+    const webSocket = new WebSocket('ws://localhost:8080/websocket');
+
+    webSocket.onerror = function(event) {
+        onError(event)
+    };
+
+    webSocket.onopen = function(event) {
+        onOpen(event)
+    };
+
+    webSocket.onmessage = function(event) {
+        onMessage(event)
+    };
+
+    function onMessage(event) {
+        document.getElementById('messages').innerHTML
+            += '<br />Received message: ' + event.data;
+    }
+
+    function onOpen(event) {
+        document.getElementById('messages').innerHTML
+            = 'Websocket connection established';
+    }
+
+    function onError(event) {
+        console.log("Error: " + event.data);
+    }
+
+    function send() {
+        const txt = document.getElementById('inputmessage').value;
+        webSocket.send(txt);
+        return false;
+    }
+</script>
+</body>
+</html>

@@ -6,6 +6,7 @@ import hu.adsd.dashboard.projectSummary.ProjectSummaryData;
 import hu.adsd.dashboard.projectSummary.ProjectSummaryDataRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,7 +91,7 @@ public class IssueController {
 
     //refresh issue table  by get request
     @GetMapping("/refresh")
-    public String refreshPage() {
+    public String refreshPage() throws IOException {
         //Update data here
         repository.deleteAll();
         saveAllIssuesToCustomerDb();
