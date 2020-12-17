@@ -23,6 +23,12 @@ public class ProjectSummaryData {
         this.name = name;
     }
 
+    // Increment items and storyPoints
+    public void increment(int storyPoints) {
+        this.storyPoints += storyPoints;
+        this.items += 1;
+    }
+
     // Compare Data for Equality
     //
     // Objects with same name are equal
@@ -72,13 +78,4 @@ public class ProjectSummaryData {
     public void setItems(int items) {
         this.items = items;
     }
-
-    // Increment Methods
-	public void incrementItems() {
-        this.items += 1;
-	}
-
-	public void incrementStoryPoints(int storyPoints2) {
-        this.storyPoints += storyPoints2;
-	}
 }
