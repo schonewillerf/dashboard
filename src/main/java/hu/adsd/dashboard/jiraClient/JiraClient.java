@@ -89,117 +89,84 @@ public class JiraClient {
                 update.setStoryPoints(sp);
 
             }
-            //get  histpry of last change
-
-
-            JSONArray history=updatedItemObject.getJSONObject("changelog").getJSONArray("histories");
-
-
-            for (int j=0; j<history.length();j++)
-            {
-                JSONObject lastHistory= (JSONObject) history.get(j);
-                JSONArray changeLogArray= lastHistory.getJSONArray("items");
-
-                for ( int n=0; n<changeLogArray.length(); n++)
-                {
-                    JSONObject logItemObject = changeLogArray.getJSONObject(n);
-                    String changedStatus =logItemObject.getString("field");
-                    if(!changedStatus.equalsIgnoreCase("rank"))
-                    {
-                        switch(changedStatus)
-                        {
-                            case "status":
-                                System.out.println("status: "+changedStatus);
-                                String fromStatus=logItemObject.getString("fromString");
-                                update.setChangedStatusFrom(fromStatus);
-                                String toStatus=logItemObject.getString("toString");
-                                update.setChangedStatusTo(toStatus);
-                                System.out.println("status to "+ toStatus+ " key us"+ update.getItemKey());
-                                if (toStatus.equals("Done"))
-                                {
-                                    update.setResolved(true);
-
-                                }
-                                break;
-                            case "description":
-                                System.out.println("description"+changedStatus);
-                                break;
-                            case "resolution":
-
-                                System.out.println("resolution: "+changedStatus);
-                                break;
-                            case "Story point estimate":
-                                System.out.println("sp"+changedStatus);
-                                break;
-
-                            default:
-
-                                System.out.println("no status"+changedStatus);
-                        }
-
-                    }
-
-                }
-
-
-            }
-
-/*
-            JSONObject lastHistory= (JSONObject) history.get(0);
-            String datumStringUpdate=lastHistory.getString("created");
-           // System.out.println("datum update: "+datumStringUpdate);
-            LocalDate date=LocalDate.parse(datumStringUpdate.substring(0,10));
-            update.setLastChangedOn(date);
-            //System.out.println("loca date: "+date);
-            // loop through change log
-            JSONArray changeLogArray= lastHistory.getJSONArray("items");
-            for ( int n=0; n<changeLogArray.length(); n++)
-            {
-                JSONObject logItemObject = changeLogArray.getJSONObject(n);
-                String changedStatus =logItemObject.getString("field");
-                //System.out.println("changed status : "+ changedStatus);
-                if(changedStatus.equalsIgnoreCase("status"))
-                {
-                    String fromStatus=logItemObject.getString("fromString");
-                    update.setChangedStatusFrom(fromStatus);
-                    String toStatus=logItemObject.getString("toString");
-                    update.setChangedStatusTo(toStatus);
-                    System.out.println("status to "+ toStatus+ " key us"+ update.getItemKey());
-                    if (toStatus.equals("Done"))
-                    {
-                        update.setResolved(true);
-                    }
-                }
-
-                if (notNullObject(fieldsObject,"summary"))
-                {
-                    String itemSummary=fieldsObject.getString("summary");
-                    update.setItemSummary(itemSummary);
-                }
-
-
-                JSONObject histoiresAuthor=lastHistory.getJSONObject("author");
-                JSONObject avatarsUrl= (JSONObject) histoiresAuthor.get("avatarUrls");
-                String avatorUrl=avatarsUrl.getString("48x48");
-
-                String displayName=histoiresAuthor.getString("displayName");
-
-                update.setAuthor(displayName);
-                update.setAvatarUrl(avatorUrl);
-            }
-
+            // user story status
             String status =fieldsObject.getJSONObject("status").getString("name");
             update.setItemStatus(status);
-*/
+            // check if user story is resolved
+            if(status.equalsIgnoreCase("done"))
+            update.setResolved(true);
+            // get user stories summary
+            if (notNullObject(fieldsObject,"summary"))
+            {
+                String issueName=fieldsObject.getString("summary");
+                update.setItemSummary(issueName);
+            }
 
+            // change logs
+            JSONArray history=updatedItemObject.getJSONObject("changelog").getJSONArray("histories");
+            loopThroughChangeLogs(history,update);
             list.add(update);
 
 
         }
-
-        System.out.println("list length? "+list.size());
-
         return list;
+    }
+
+
+    public static void loopThroughChangeLogs(JSONArray history, UpdatedItem update)
+    {
+
+        //outer loop
+        for (int j=0; j<history.length();j++)
+        {
+            JSONObject lastHistory= (JSONObject) history.get(j);
+            JSONArray changeLogArray= lastHistory.getJSONArray("items");
+            JSONObject histoiresAuthor=lastHistory.getJSONObject("author");
+            JSONObject avatarsUrl= (JSONObject) histoiresAuthor.get("avatarUrls");
+            String avatorUrl=avatarsUrl.getString("48x48");
+            String displayName=histoiresAuthor.getString("displayName");
+            update.setAuthor(displayName);
+            update.setAvatarUrl(avatorUrl);
+            String datumStringUpdate=lastHistory.getString("created");
+            LocalDate date=LocalDate.parse(datumStringUpdate.substring(0,10));
+            update.setLastChangedOn(date);
+           for ( int n=0; n<changeLogArray.length(); n++)
+            {
+                JSONObject logItemObject = changeLogArray.getJSONObject(n);
+                String changedStatus =logItemObject.getString("field");
+                {
+                    switch(changedStatus)
+                    {
+                       // if chaned status = rank, than break inner loop and go to the outer loop
+                        case "Rank":
+                            break;
+                        case "status":
+                            String fromStatus=logItemObject.getString("fromString");
+                            update.setChangedStatusFrom(fromStatus);
+                            String toStatus=logItemObject.getString("toString");
+                            update.setChangedStatusTo(toStatus);
+                            // if changed status is found, than break inner & outer loop
+                            return;
+                        case "description":
+                            System.out.println("description"+changedStatus);
+                            // break inner & outer loop
+                            return;
+                        case "resolution":
+                            // break inner loop and continue to outer loop
+                            break;
+                        case "Story point estimate":
+                            // break inner & outer loop
+                            return;
+                          default:
+                            System.out.println("no status"+changedStatus);
+                    }
+
+                }
+
+            }
+
+
+        }
     }
 
 
