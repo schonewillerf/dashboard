@@ -92,17 +92,13 @@ public class IssueController {
             // Create new ProjectSummaryData with current issue status e.g. "To Do", "Doing", "Done" etc.
             ProjectSummaryData currentIssueData = new ProjectSummaryData(issue.getIssueStatus());
 
-            // Check if summaryData already contains issue with same issue status
-            if (summaryData.contains(currentIssueData)) {
-                currentIssueData = summaryData.get(summaryData.indexOf(currentIssueData));
+            int issueIndex = summaryData.indexOf(currentIssueData);
+            if (issueIndex < 0) {
+                currentIssueData.increment(issue.getStoryPoints());
+                summaryData.add(currentIssueData);
+            } else {
+                summaryData.get(issueIndex).increment(issue.getStoryPoints());
             }
-
-            // Increment No. of items and storypoints
-            currentIssueData.incrementItems();
-            currentIssueData.incrementStoryPoints(issue.getStoryPoints());
-
-            // It is safe to add the duplicates back to array
-            summaryData.add(currentIssueData);
         }
 
         // Save totals to DB
