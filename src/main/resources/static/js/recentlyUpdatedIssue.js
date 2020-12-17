@@ -12,72 +12,38 @@ httpGetAsync('http://localhost:8080/getUpdatedTasks', 'GET', function (result){
         statusArray.push(obj.issueStatus);
         sumarryArray.push(obj.issueName);
 
-        // get parent element
-        const parentElemet = document.querySelector(".list-group");
+        createList(spArray[i],statusArray[i], sumarryArray[i]);
 
-        const elementList = document.createElement("li");
-        elementList.classList.add("list-group-item","d-flex","justify-content-between","align-items-center");
-
-        const elementP = document.createElement("p");
-        const elementTextSummary = document.createTextNode(sumarryArray[i]);
-        const elementSpanTaskStatus = document.createElement("span");
-
-        const elementText2 = document.createTextNode("     -    "
-            + statusArray[i].toUpperCase());
-        const taskStatus = statusArray[i].toUpperCase();
-        if(taskStatus === "DONE")
-        {
-            elementSpanTaskStatus.classList.add("green");
-        }
-        else if (taskStatus === "DOING")
-        {
-            elementSpanTaskStatus.classList.add("orange");
-        }
-
-        else if (taskStatus === "TESTING")
-        {
-            elementSpanTaskStatus.classList.add("yellow");
-        }
-
-
-        elementSpanTaskStatus.appendChild(elementText2);
-
-        elementP.appendChild(elementTextSummary);
-        elementP.appendChild(elementSpanTaskStatus);
-
-        const elementSpan = document.createElement("span");
-        elementSpan.classList.add("badge","badge-primary","badge-pill");
-        const textSP = document.createTextNode(spArray[i]);
-        elementSpan.appendChild(textSP);
-        elementList.appendChild(elementP);
-        elementList.appendChild(elementSpan);
-        parentElemet.appendChild(elementList);
-    }
+   }
 });
 
 
 // create list group dynamic
 function createList(storyPoints, statusArr, SummaryArr)
 {
-    const updates = ["doing", "done", "testing", "sprint%20backlog"];
+    // get parent element
+    const parentElemet = document.querySelector(".list-group");
 
-    for (let i=0; i<updates.length; i++)
+    const elementList = document.createElement("li");
+    elementList.classList.add("list-group-item","d-flex","justify-content-between","align-items-center");
+
+    const elementP = document.createElement("p");
+    const elementTextSummary = document.createTextNode(SummaryArr);
+    const elementSpanTaskStatus = document.createElement("span");
+
+    const elementText2 = document.createTextNode("     -    "
+        + statusArr.toUpperCase());
+    const taskStatus = statusArr.toUpperCase();
+    if(taskStatus === "DONE")
     {
-        const requestRefresh = new XMLHttpRequest();
-        console.log("updates:");
-        console.log(updates[i]);
-        const requestUpdateUri = "http://localhost:8080/updateProjectSummary?status=" + updates[i];
-        requestRefresh.open("GET", requestUpdateUri);
-        requestRefresh.send();
+        elementSpanTaskStatus.classList.add("green");
     }
-
-
     elementSpanTaskStatus.appendChild(elementText2);
     elementP.appendChild(elementTextSummary);
     elementP.appendChild(elementSpanTaskStatus);
-    var elementSpan=document.createElement("span");
+    const elementSpan = document.createElement("span");
     elementSpan.classList.add("badge","badge-primary","badge-pill");
-    var textSP=document.createTextNode(storyPoints);
+    const textSP = document.createTextNode(storyPoints);
     elementSpan.appendChild(textSP);
     elementList.appendChild(elementP);
     elementList.appendChild(elementSpan);
