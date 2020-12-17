@@ -64,16 +64,10 @@ public class IssueController {
     }
 
     @RequestMapping("/getUpdatedTasks")
-    public List<Issue> getUpdatedTasks() {
-        List<Issue> issues = new ArrayList<>();
-        String[] keys = JiraClient.getkeysOfRecentUpdatedIssues("1w", 7);
+    public List<UpdatedItem> getUpdatedTasks() {
 
-        for (int i = 0; i < keys.length; i++) {
-            Issue issue = repository.findOneByIssueKeyIgnoreCase(keys[i]);
-            issues.add(issue);
-        }
+        return JiraClient.getUpdates("1w", 7);
 
-        return issues;
     }
 
     // refresh issue table by get request
