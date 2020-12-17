@@ -14,8 +14,7 @@ import javax.websocket.server.ServerEndpoint;
 @Component
 public class WebSocket {
 
-    private static Set<Session> clients =
-            Collections.synchronizedSet(new HashSet<Session>());
+    private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
 
     @OnMessage
     public void onMessage(Session session, String message) throws IOException {
