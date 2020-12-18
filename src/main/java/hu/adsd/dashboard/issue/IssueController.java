@@ -5,7 +5,6 @@ import hu.adsd.dashboard.projectSummary.ProjectSummaryData;
 import hu.adsd.dashboard.projectSummary.ProjectSummaryDataRepository;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +14,13 @@ public class IssueController {
     // Properties
     private final IssueRepository repository;
     private final ProjectSummaryDataRepository projectSummaryDataRepository;
+    private final UpdateItemRepository updateItemRepository;
 
     // Constructor
-    public IssueController(IssueRepository repository, ProjectSummaryDataRepository projectSummaryDataRepository) {
+    public IssueController(IssueRepository repository, ProjectSummaryDataRepository projectSummaryDataRepository, UpdateItemRepository updateItemRepository) {
         this.repository = repository;
         this.projectSummaryDataRepository = projectSummaryDataRepository;
+        this.updateItemRepository = updateItemRepository;
     }
 
     // save all the items from all existing projects of Jira in db
@@ -66,7 +67,11 @@ public class IssueController {
     @RequestMapping("/getUpdatedTasks")
     public List<UpdatedItem> getUpdatedTasks() {
 
-        return JiraClient.getUpdates("1w", 7);
+        //save updated to db
+        List<UpdatedItem> list=JiraClient.getUpdates("1w", 7);
+        updateItemRepository.deleteAll();
+        updateItemRepository.saveAll(list);
+        return list;
 
     }
 

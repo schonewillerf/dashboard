@@ -123,7 +123,7 @@ public class JiraClient {
             JSONArray changeLogArray= lastHistory.getJSONArray("items");
             JSONObject histoiresAuthor=lastHistory.getJSONObject("author");
             JSONObject avatarsUrl= (JSONObject) histoiresAuthor.get("avatarUrls");
-            String avatorUrl=avatarsUrl.getString("48x48");
+            String avatorUrl=avatarsUrl.getString("16x16");
             String displayName=histoiresAuthor.getString("displayName");
             update.setAuthor(displayName);
             update.setAvatarUrl(avatorUrl);
@@ -141,6 +141,7 @@ public class JiraClient {
                         case "Rank":
                             break;
                         case "status":
+                            update.setItemType("status");
                             String fromStatus=logItemObject.getString("fromString");
                             update.setChangedStatusFrom(fromStatus);
                             String toStatus=logItemObject.getString("toString");
@@ -148,13 +149,16 @@ public class JiraClient {
                             // if changed status is found, than break inner & outer loop
                             return;
                         case "description":
+                            update.setItemType("description");
                             System.out.println("description"+changedStatus);
                             // break inner & outer loop
                             return;
                         case "resolution":
+                            update.setItemType("resolution");
                             // break inner loop and continue to outer loop
                             break;
                         case "Story point estimate":
+                            update.setItemType("spEstimate");
                             // break inner & outer loop
                             return;
                           default:

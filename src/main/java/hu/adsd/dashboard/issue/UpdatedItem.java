@@ -22,10 +22,19 @@ public class UpdatedItem {
     private String avatarUrl;
     private String author;
     private String itemStatus;
+    private String itemType;
 
 
     //getter en setter
 
+
+    public String getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
+    }
 
     public String getItemStatus() {
         return itemStatus;
