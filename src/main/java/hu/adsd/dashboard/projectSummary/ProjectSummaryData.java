@@ -78,4 +78,14 @@ public class ProjectSummaryData {
     public void setItems(int items) {
         this.items = items;
     }
+
+    // Increment Methods
+    public void incrementItems() {
+        this.items += 1;
+    }
+
+    public void incrementStoryPoints(int storyPoints2) {
+        this.storyPoints += storyPoints2;
+    }
+
 }
