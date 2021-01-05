@@ -6,7 +6,7 @@ let myPieChart;
 
 // Update method
 function updateSentimentChart() {
-    httpGetAsync('http://localhost:8080/sentimentdata', 'GET', function (result){
+    httpGetAsync('/sentimentdata', 'GET', function (result){
         const json = JSON.parse(result);
         const values = [];
         const names = [];
