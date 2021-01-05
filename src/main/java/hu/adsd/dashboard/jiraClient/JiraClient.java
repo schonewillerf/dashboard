@@ -1,6 +1,7 @@
 package hu.adsd.dashboard.jiraClient;
 
 import hu.adsd.dashboard.issue.Issue;
+import hu.adsd.dashboard.issue.UpdatedItem;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 import org.json.JSONArray;
@@ -8,6 +9,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -15,6 +17,12 @@ import java.util.regex.Pattern;
 
 @Component
 public class JiraClient {
+
+    public static void main(String[] args) {
+
+        getUpdates("1w", 7);
+
+    }
 
 
     public static JSONObject sendNetworkRequest(String query)
@@ -60,23 +68,109 @@ public class JiraClient {
     }
 
 
-    public static String[] getkeysOfRecentUpdatedIssues(String withinPeriodOfTime, int maxResult)
+    public static List<UpdatedItem>  getUpdates (String withinPeriodOfTime, int maxResult)
     {
-        String query="https://andgreg.atlassian.net/rest/api/2/search?jql=updated%20%3E=%20-"+withinPeriodOfTime+"%20order%20by%20updated%20DESC&maxResults="+maxResult;
+
+        List<UpdatedItem> list=new ArrayList<>();
+        String query="https://andgreg.atlassian.net/rest/api/2/search?jql=updated%20%3E=%20-"+withinPeriodOfTime+"%20order%20by%20updated%20DESC&maxResults="+maxResult+"&expand=changelog";
         JSONObject responseObject=sendNetworkRequest(query);
-        JSONArray issues=responseObject.getJSONArray("issues");
-        int size=issues.length();
-        String[] keyList=new String[size];
-
-        for (int i=0;i<size; i++)
+        JSONArray updatesItems=responseObject.getJSONArray("issues");
+        for (int i=0; i<updatesItems.length(); i++)
         {
-            JSONObject jsonObjectIssues=issues.getJSONObject(i);
-            String issueKey=jsonObjectIssues.getString("key");
+            UpdatedItem update=new UpdatedItem();
+            JSONObject updatedItemObject=updatesItems.getJSONObject(i);
+            String updatedKey=updatedItemObject.getString("key");
+            update.setItemKey(updatedKey);
+            JSONObject fieldsObject=updatedItemObject.getJSONObject("fields");
+            //Stroy point are saved to customfield_10016
+            if (notNullObject(fieldsObject,"customfield_10016"))
+            {
+                Integer sp=fieldsObject.getInt("customfield_10016");
+                update.setStoryPoints(sp);
 
-            keyList[i]=issueKey;
+            }
+            // user story status
+            String status =fieldsObject.getJSONObject("status").getString("name");
+            update.setItemStatus(status);
+            // check if user story is resolved
+            if(status.equalsIgnoreCase("done"))
+            update.setResolved(true);
+            // get user stories summary
+            if (notNullObject(fieldsObject,"summary"))
+            {
+                String issueName=fieldsObject.getString("summary");
+                update.setItemSummary(issueName);
+            }
+
+            // change logs
+            JSONArray history=updatedItemObject.getJSONObject("changelog").getJSONArray("histories");
+            loopThroughChangeLogs(history,update);
+            list.add(update);
+
+
         }
+        return list;
+    }
 
-        return keyList;
+
+    public static void loopThroughChangeLogs(JSONArray history, UpdatedItem update)
+    {
+
+        //outer loop
+        for (int j=0; j<history.length();j++)
+        {
+            JSONObject lastHistory= (JSONObject) history.get(j);
+            JSONArray changeLogArray= lastHistory.getJSONArray("items");
+            JSONObject histoiresAuthor=lastHistory.getJSONObject("author");
+            JSONObject avatarsUrl= (JSONObject) histoiresAuthor.get("avatarUrls");
+            String avatorUrl=avatarsUrl.getString("16x16");
+            String displayName=histoiresAuthor.getString("displayName");
+            update.setAuthor(displayName);
+            update.setAvatarUrl(avatorUrl);
+            String datumStringUpdate=lastHistory.getString("created");
+            LocalDate date=LocalDate.parse(datumStringUpdate.substring(0,10));
+            update.setLastChangedOn(date);
+           for ( int n=0; n<changeLogArray.length(); n++)
+            {
+                JSONObject logItemObject = changeLogArray.getJSONObject(n);
+                String changedStatus =logItemObject.getString("field");
+                {
+                    switch(changedStatus)
+                    {
+                       // if chaned status = rank, than break inner loop and go to the outer loop
+                        case "Rank":
+                            break;
+                        case "status":
+                            update.setItemType("status");
+                            String fromStatus=logItemObject.getString("fromString");
+                            update.setChangedStatusFrom(fromStatus);
+                            String toStatus=logItemObject.getString("toString");
+                            update.setChangedStatusTo(toStatus);
+                            // if changed status is found, than break inner & outer loop
+                            return;
+                        case "description":
+                            update.setItemType("description");
+                            System.out.println("description"+changedStatus);
+                            // break inner & outer loop
+                            return;
+                        case "resolution":
+                            update.setItemType("resolution");
+                            // break inner loop and continue to outer loop
+                            break;
+                        case "Story point estimate":
+                            update.setItemType("spEstimate");
+                            // break inner & outer loop
+                            return;
+                          default:
+                            System.out.println("no status"+changedStatus);
+                    }
+
+                }
+
+            }
+
+
+        }
     }
 
 
