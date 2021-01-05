@@ -24,3 +24,21 @@
     width: 60%;
     float: left;
 }
+.contributerImg {
+    padding: 0px!important;;
+}
+
+.contributerImg img {
+    width: 35px;
+    height: 35px;
+}
+.IssueSummary p {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+.card-updates .list-group-item span.badge {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
