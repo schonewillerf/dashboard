@@ -117,4 +117,7 @@ httpGetAsync('http://localhost:8080/getUpdatedTasks', 'GET', function (result){
     }
 });
 
+    const elementP = document.createElement("p");
+    const elementTextSummary = document.createTextNode(SummaryArr);
+    const elementSpanTaskStatus = document.createElement("span");
 
