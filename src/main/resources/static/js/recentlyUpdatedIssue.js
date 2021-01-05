@@ -1,35 +1,5 @@
-httpGetAsync('http://localhost:8080/getUpdatedTasks', 'GET', function (result){
+httpGetAsync('/getUpdatedTasks', 'GET', function (result){
     const json = JSON.parse(result);
-
-    //changedStatusFrom
-    //changedStatusTo
-    //itemType
-//itemSummary
-    //itemStatus
-    //storyPoints
-
-/*<ul class="list-group text-capitalize">
-        <li class="list-group-item d-flex justify-content-between align-items-center container">
-        <div class="row">
-        <div class="col-3">
-        IMAGE
-        </div>
-        <div class="col-9">
-        ISSUENAAM
-        </div>
-
-        <div class=""col-1>
-        </div>
-
-        </div>
-        <div class="row">
-        <p>Verbeterde manier om te stemmen<span>     -    INTERNAL TESTING</span></p>
-    </div>
-    <span class="badge badge-primary badge-pill">0</span>
-        </li>
-        </ul>*/
-
-
 
     // loop throught results
     for (let i=0; i<json.length; i++ )
@@ -55,8 +25,6 @@ httpGetAsync('http://localhost:8080/getUpdatedTasks', 'GET', function (result){
         const divRow12=document.createElement("div");
         divRow12.classList.add("col-11");
         elementDivRow2.appendChild(divRow12);
-
-
 
          // add col with img
         const elementColImg=document.createElement("div");
@@ -116,8 +84,3 @@ httpGetAsync('http://localhost:8080/getUpdatedTasks', 'GET', function (result){
 
     }
 });
-
-    const elementP = document.createElement("p");
-    const elementTextSummary = document.createTextNode(SummaryArr);
-    const elementSpanTaskStatus = document.createElement("span");
-

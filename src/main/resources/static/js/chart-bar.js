@@ -2,7 +2,7 @@
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
 
-httpGetAsync('http://localhost:8080/topcontributordata', 'GET', function (result){
+httpGetAsync('/topcontributordata', 'GET', function (result){
 // Variables
   const labels = [];
   const values = [];

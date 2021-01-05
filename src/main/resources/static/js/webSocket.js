@@ -1,4 +1,5 @@
-const webSocket = new WebSocket('ws://localhost:8080/websocket');
+const ipAddress = window.location.host;
+const webSocket = new WebSocket('ws://' + ipAddress + '/websocket');
 
 webSocket.onerror = function(event) {
     onError(event)

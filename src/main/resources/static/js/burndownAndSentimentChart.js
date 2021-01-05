@@ -9,7 +9,7 @@ let burndownChart;
 function updateBurndownSentiment() {
     const labels = burndownChart.data.labels;
 
-    httpGetAsync('http://localhost:8080/sentimentdailychart', 'GET', function (result){
+    httpGetAsync('/sentimentdailychart', 'GET', function (result){
         const json = JSON.parse(result);
 
         // Update Sentiment Dataset
@@ -20,7 +20,7 @@ function updateBurndownSentiment() {
 
 //Update Burndownchart
 function updateBurndown(){
-    httpGetAsync('http://localhost:8080/burndowndata', 'GET', function (result) {
+    httpGetAsync('/burndowndata', 'GET', function (result) {
         const currentQuantityArray = [];
         const estimatedQuantityArray = [];
 
@@ -49,7 +49,7 @@ function updateBurndown(){
     });
 }
 
-httpGetAsync('http://localhost:8080/burndowndata', 'GET', function (result){
+httpGetAsync('/burndowndata', 'GET', function (result){
     // Variables
     const labels = [];
     const currentQuantityArray = [];

@@ -12,7 +12,7 @@ function httpGetAsync(theUrl, method, callback)
 }
 
 function getSentimentData() {
-    httpGetAsync('http://localhost:8080/sentimentdata', 'GET', function (result){
+    httpGetAsync('/sentimentdata', 'GET', function (result){
         const json = JSON.parse(result);
         const values = [];
         const names = [];
@@ -27,7 +27,7 @@ function getSentimentData() {
 }
 
 function getProjectSummary(){
-    httpGetAsync('http://localhost:8080/projectsummary', 'GET', function(result){
+    httpGetAsync('/projectsummary', 'GET', function(result){
         let json = JSON.parse(result);
         let html = "";
         const colors = ["#e74a3b", "#fd7e14", "#f6c23e", "#1cc88a"];

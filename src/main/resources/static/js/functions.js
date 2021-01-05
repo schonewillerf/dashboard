@@ -1,7 +1,7 @@
 launchModal();
 
 function voteSentiment(vote){
-    httpGetAsync('http://localhost:8080/sentimentdata/' + vote, 'POST', function (){
+    httpGetAsync('/sentimentdata/' + vote, 'POST', function (){
         getSentimentData();
         document.getElementById("vote-block").classList.remove("d-flex");
         document.getElementById("vote-block").classList.add("d-none");
