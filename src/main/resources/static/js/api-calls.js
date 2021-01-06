@@ -30,7 +30,7 @@ function getProjectSummary(){
     httpGetAsync('/projectsummary', 'GET', function(result){
         let json = JSON.parse(result);
         let html = "";
-        const colors = ["#e74a3b", "#fd7e14", "#f6c23e", "#1cc88a"];
+        const colors = ["#e74a3b", "#fd7e14", "#f6c23e", "#1cc88a", "#4e73df"];
 
         for (let i = 0; i < json.length; i++) {
             const obj = json[i];
@@ -39,6 +39,7 @@ function getProjectSummary(){
                 "<div class='col-3 mt-2' style='color: " + colors[i] + "'>" + obj.storyPoints + "</div>";
         }
         document.getElementById("project-summary-data").innerHTML = html;
+
         summaryChart(json);
     });
 }

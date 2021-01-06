@@ -32,8 +32,8 @@ public class BurndownController {
     @GetMapping("/burndowndata")
     public Object[] getBurndownData() {
         // Meant to be generated externally in future
-        LocalDate date1 = LocalDate.parse("2020-12-14");
-        LocalDate date2 = LocalDate.parse("2020-12-25");
+        LocalDate date1 = LocalDate.parse("2020-12-28");
+        LocalDate date2 = LocalDate.parse("2021-01-08");
 
         List<BurndownData> sprintBurndown = burndownDataRepository.findAllByDateBetweenOrderByDate(date1, date2);
         List<DailySentiment> sprintSentiment = dailySentimentRepository.findAllByDateBetweenOrderByDate(date1, date2);
@@ -54,8 +54,8 @@ public class BurndownController {
         burndownDataRepository.deleteAll();
 
         // Will be passed as parameters from API
-        String startDateString = "2020-12-14";
-        String endDateString = "2020-12-25";
+        String startDateString = "2020-12-28";
+        String endDateString = "2021-01-08";
         double totalStoryPointsPerSprint = 150;
 
         // Method variables

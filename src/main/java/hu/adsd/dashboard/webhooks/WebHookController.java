@@ -4,35 +4,28 @@ import hu.adsd.dashboard.issue.Issue;
 import hu.adsd.dashboard.issue.UpdateItemRepository;
 import hu.adsd.dashboard.issue.UpdatedItem;
 import hu.adsd.dashboard.jiraClient.JiraClient;
+import hu.adsd.dashboard.messenger.MessageService;
 import hu.adsd.dashboard.projectSummary.ProjectSummaryData;
 import hu.adsd.dashboard.projectSummary.ProjectSummaryDataRepository;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.http.MediaType;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @RestController
 public class WebHookController {
 
-    // list sse emmiters
-    public List<SseEmitter> listEmitters=new CopyOnWriteArrayList<>();
-
     private final ProjectSummaryDataRepository projectSummaryDataRepository;
-    private  final UpdateItemRepository updateItemRepository;
+    private final UpdateItemRepository updateItemRepository;
+    private final MessageService messageService;
 
-
-    public WebHookController(ProjectSummaryDataRepository projectSummaryDataRepository, UpdateItemRepository updateItemRepository) {
+    public WebHookController(ProjectSummaryDataRepository projectSummaryDataRepository, UpdateItemRepository updateItemRepository, MessageService messageService) {
         this.projectSummaryDataRepository = projectSummaryDataRepository;
         this.updateItemRepository = updateItemRepository;
+        this.messageService = messageService;
     }
-
 
     @PostMapping("/webhook")
     ResponseEntity<String> webHookListener (@RequestBody String payload)
@@ -40,10 +33,10 @@ public class WebHookController {
         if (payload!=null)
         {
             // refresh data
-
             List<Issue> allIssues = JiraClient.getAllIssues();
             List<ProjectSummaryData> summaryData = new ArrayList<>();
             for (Issue issue : allIssues) {
+                System.out.println(issue.getIssueStatus());
                 ProjectSummaryData currentIssueData = new ProjectSummaryData(issue.getIssueStatus());
                 if (summaryData.contains(currentIssueData)) {
                     currentIssueData = summaryData.get(summaryData.indexOf(currentIssueData));
@@ -60,60 +53,17 @@ public class WebHookController {
 
             //updated tasks
 
-            List<UpdatedItem> listUpdatedItems= JiraClient.getUpdates("1w", 7);
+            List<UpdatedItem> listUpdatedItems= JiraClient.getUpdates("1w", 10);
             updateItemRepository.deleteAll();
             updateItemRepository.saveAll(listUpdatedItems);
 
-
-
-            //dispatch sse emmiter
-            for (SseEmitter emitter:listEmitters)
-            {
-                try {
-                    emitter.send(emitter.event().name("webhookJira").data(payload));
-                } catch (IOException e) {
-                    listEmitters.remove(emitter);
-                    //e.printStackTrace();
-
-                }
-            }
+            //Send message to clients
+            messageService.sendMessage("updateScrumboard");
 
             return ResponseEntity.ok(payload);
         }
 
-
-
-
-        // if wehbook not recieved
+        // if webhook not received
         return ResponseEntity.ok("something went wrong");
     }
-
-
-
-    // subscribe emmitter
-    @CrossOrigin
-    @RequestMapping(value = "/subscribe", consumes = MediaType.ALL_VALUE)
-    public SseEmitter subscribeEmmitter()
-    {
-        // timeout Long.MAX_VALUE
-        SseEmitter sseEmitter=new SseEmitter();
-        try {
-            sseEmitter.send(sseEmitter.event().name("INIT"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        sseEmitter.onCompletion(()->listEmitters.remove(sseEmitter));
-        listEmitters.add(sseEmitter);
-
-        return sseEmitter;
-    }
-
-
-    @EventListener(ApplicationReadyEvent.class)
-    public void subsribeEmmitersAfterStartup() {
-        subscribeEmmitter();
-    }
-
-
 }

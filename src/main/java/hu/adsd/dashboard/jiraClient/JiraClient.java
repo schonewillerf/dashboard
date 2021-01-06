@@ -59,7 +59,7 @@ public class JiraClient {
     public static List<Issue> getAllIssues()
     {
         // search for all issues  of all the projects is Jira
-        String query="https://andgreg.atlassian.net/rest/api/2/search?";
+        String query="https://andgreg.atlassian.net/rest/api/2/search?jql=ORDER+BY+status+ASC";
         JSONObject resObj = sendNetworkRequest(query);
         JSONArray issues=resObj.getJSONArray("issues");
         List<Issue> parsedIssueList = parseIssues(issues);
@@ -123,7 +123,7 @@ public class JiraClient {
             JSONArray changeLogArray= lastHistory.getJSONArray("items");
             JSONObject histoiresAuthor=lastHistory.getJSONObject("author");
             JSONObject avatarsUrl= (JSONObject) histoiresAuthor.get("avatarUrls");
-            String avatorUrl=avatarsUrl.getString("16x16");
+            String avatorUrl=avatarsUrl.getString("32x32");
             String displayName=histoiresAuthor.getString("displayName");
             update.setAuthor(displayName);
             update.setAvatarUrl(avatorUrl);
@@ -137,7 +137,7 @@ public class JiraClient {
                 {
                     switch(changedStatus)
                     {
-                       // if chaned status = rank, than break inner loop and go to the outer loop
+                       // if changed status = rank, than break inner loop and go to the outer loop
                         case "Rank":
                             break;
                         case "status":
@@ -150,7 +150,6 @@ public class JiraClient {
                             return;
                         case "description":
                             update.setItemType("description");
-                            System.out.println("description"+changedStatus);
                             // break inner & outer loop
                             return;
                         case "resolution":
@@ -162,18 +161,12 @@ public class JiraClient {
                             // break inner & outer loop
                             return;
                           default:
-                            System.out.println("no status"+changedStatus);
+                            System.out.println("no status "+changedStatus);
                     }
-
                 }
-
             }
-
-
         }
     }
-
-
 
     public static List<Issue> parseIssues(JSONArray issues)
     {
@@ -212,7 +205,14 @@ public class JiraClient {
             {
                 String description=fieldsObject.getString("description");
                 issue.setDescription(description);
-                issue.setStoryPoints(findSPwithRegex(description));
+            }
+
+            //Stroy point are saved to customfield_10016
+            if (notNullObject(fieldsObject,"customfield_10016"))
+            {
+                Integer sp=fieldsObject.getInt("customfield_10016");
+                issue.setStoryPoints(sp);
+
             }
 
             //add issue by issue in a list with all issues

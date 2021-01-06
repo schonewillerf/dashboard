@@ -5,7 +5,7 @@ Chart.defaults.global.defaultFontColor = '#858796';
 function summaryChart(json){
   //Loop though data and make arrays
   const values = [];
-  const myColorsArray = ["#e74a3b", "#fd7e14", "#f6c23e", "#1cc88a"];
+  const myColorsArray = ["#e74a3b", "#fd7e14", "#f6c23e", "#1cc88a", "#4e73df"];
 
   for (let i = 0; i < json.length; i++) {
     const obj = json[i];
