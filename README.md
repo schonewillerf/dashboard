@@ -4,7 +4,7 @@ Mono-repository for HU ADSD Dashboard Application client and server. Spring Boot
 
 ## How To
 
-Run: `./mvnw spring-boot:run` and visit http://localhost:8080/ in any browser 
+Run: `./mvnw spring-boot:run` and visit http://localhost:443/ in any browser 
 
 Test: `./mvnw test`
 

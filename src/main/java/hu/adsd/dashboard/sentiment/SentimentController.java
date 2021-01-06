@@ -1,6 +1,6 @@
 package hu.adsd.dashboard.sentiment;
 
-import hu.adsd.dashboard.webSocket.WebSocket;
+import hu.adsd.dashboard.messenger.MessageService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,14 +14,16 @@ public class SentimentController {
     // Properties
     private final SentimentDataRepository sentimentDataRepository;
     private final DailySentimentRepository dailySentimentRepository;
+    private final MessageService messageService;
 
     // Constructor
     public SentimentController(
             SentimentDataRepository sentimentDataRepository,
-            DailySentimentRepository dailySentimentRepository
-    ) {
+            DailySentimentRepository dailySentimentRepository,
+            MessageService messageService) {
         this.sentimentDataRepository = sentimentDataRepository;
         this.dailySentimentRepository = dailySentimentRepository;
+        this.messageService = messageService;
     }
 
     @GetMapping("/sentimentdata")
@@ -49,8 +51,7 @@ public class SentimentController {
         dailySentiment.setAverageSentiment( averageSentiment );
         dailySentimentRepository.save( dailySentiment );
 
-        WebSocket webSocket = new WebSocket();
-        webSocket.sendMessage("updateSentiment");
+        messageService.sendMessage("updateSentiment");
 
         return sentimentDataRepository.countSentimentByValue(formattedDate);
     }
@@ -59,8 +60,8 @@ public class SentimentController {
     public List<DailySentiment> getDailySentiment() {
 
         // Will be dynamic at some point
-        LocalDate startDate = LocalDate.parse("2020-12-14");
-        LocalDate endDate = LocalDate.parse("2020-12-25");
+        LocalDate startDate = LocalDate.parse("2020-12-28");
+        LocalDate endDate = LocalDate.parse("2021-01-08");
 
         return dailySentimentRepository.findAllByDateBetweenOrderByDate( startDate, endDate );
     }
