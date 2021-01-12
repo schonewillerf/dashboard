@@ -31,6 +31,11 @@ public class EmployeeData {
     // Intentionally left empty
     protected EmployeeData() { }
 
+    // Other constructor
+    public EmployeeData(String name) {
+        this.name = name;
+    }
+
     // Normal getters, setters
     public int getId() {
         return id;
