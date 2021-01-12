@@ -2,6 +2,7 @@ function updateUpdates() {
     httpGetAsync('/getUpdatedTasks', 'GET', function (result) {
         const json = JSON.parse(result);
         document.querySelector(".list-group").innerHTML = "";
+        let lastUpdatedIssueDone = Boolean(false);
 
         // loop throught results
         for (let i = 0; i < json.length; i++) {
@@ -66,6 +67,19 @@ function updateUpdates() {
                 textStatusP.appendChild(textNodeStatusTo);
                 divRow12.appendChild(textStatusP);
 
+                //Get todays date
+                let today = new Date();
+                let dd = String(today.getDate()).padStart(2, '0');
+                let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                let yyyy = today.getFullYear();
+
+                today = yyyy + '-' + mm + '-' + dd;
+
+                //Check if status is set to done AND it has been changed today
+                if(obj.resolved === true && obj.lastChangedOn === today){
+                    lastUpdatedIssueDone = true;
+                }
+
             } else if (obj.itemType === "description") {
                 const textStatusP = document.createElement("p");
                 const textStatusItem = document.createTextNode("De omschrijving is gewijzigd.");
@@ -80,6 +94,9 @@ function updateUpdates() {
 
             parentElemet.appendChild(elementList);
 
+        }
+        if(lastUpdatedIssueDone){
+            confetti();
         }
     });
 }
