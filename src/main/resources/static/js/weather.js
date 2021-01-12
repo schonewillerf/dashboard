@@ -4,7 +4,7 @@ var city = "Amersfoort";
 var apiKey = "3a7724b5c33a53b756d9aaeb997c3527";
 
 function getWeatherFromApi(){
-    httpGetAsync("http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=" + apiKey, 'GET', function (result){
+    httpGetAsync("https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=" + apiKey, 'GET', function (result){
         var obj = JSON.parse(result);
         getImgSrc(obj);
         getDataFromApi(obj);
@@ -26,7 +26,7 @@ function getImgSrc(responseObject) {
     const objectWeather = weather[0];
     const id = objectWeather.id;
     const imgCode = getImageCode(id);
-    const imgSrc = "http://openweathermap.org/img/wn/" + imgCode + "@4x.png";
+    const imgSrc = "https://openweathermap.org/img/wn/" + imgCode + "@4x.png";
     document.getElementById("weerImg").style.backgroundImage = 'url(' + imgSrc + ')';
 
 }
