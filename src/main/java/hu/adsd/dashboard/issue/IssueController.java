@@ -68,7 +68,7 @@ public class IssueController {
     public List<UpdatedItem> getUpdatedTasks() {
 
         //save updated to db
-        List<UpdatedItem> list=JiraClient.getUpdates("1w", 7);
+        List<UpdatedItem> list=JiraClient.getUpdates("1w", 10);
         updateItemRepository.deleteAll();
         updateItemRepository.saveAll(list);
         return list;
