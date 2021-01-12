@@ -104,17 +104,26 @@
                             </div>
                         </div>
 
-                        <!-- Statistics -->
+                        <!-- Weather Chart -->
                         <div class="col-xl-2 col-lg-6">
                             <div class="card shadow mb-4">
                                 <!-- Card Header -->
                                 <div
                                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Statistieken</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Actueel weer</h6>
                                 </div>
                                 <!-- Card Body -->
-                                <div class="card-body">
-
+                                <div id="weerImg" class="card-body">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-sm weather">
+                                                <h4 class="font-weight-bold"><span id="city"></span></h4>
+                                                <p class="mt-4 mb-4">Temperatuur: <span class="font-weight-bold" id="temp"></span></p>
+                                                <p class="mt-4 mb-4">Luchtvochtigheid: <span class="font-weight-bold" id="airHumidity"></span></p>
+                                                <p class="mt-4 mb-4">Wind: <span class="font-weight-bold" id="windSpeed"></span></p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!--end of card body -->
                             </div>
@@ -153,33 +162,8 @@
                             </div>
                         </div>
 
-                        <!-- Weather Chart -->
-                        <div class="col-xl-2 col-lg-6">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header -->
-                                <div
-                                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Actueel weer</h6>
-                                </div>
-                                <!-- Card Body -->
-                                <div id="weerImg" class="card-body">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-sm weather">
-                                                <h4 class="font-weight-bold"><span id="city"></span></h4>
-                                                <p class="mt-4 mb-4">Temperatuur: <span class="font-weight-bold" id="temp"></span></p>
-                                                <p class="mt-4 mb-4">Luchtvochtigheid: <span class="font-weight-bold" id="airHumidity"></span></p>
-                                                <p class="mt-4 mb-4">Wind: <span class="font-weight-bold" id="windSpeed"></span></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--end of card body -->
-                            </div>
-                        </div>
-
                         <!-- Sentiment Chart -->
-                        <div class="col-xl-2 col-lg-6">
+                        <div class="col-xl-4 col-lg-6">
                             <div class="card shadow mb-4" id="voteCard">
                                 <!-- Card Header -->
                                 <div
