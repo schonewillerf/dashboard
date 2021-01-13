@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -25,7 +26,6 @@ public class JiraClient {
 
     }
 
-
     public static JSONObject sendNetworkRequest(String query)
     {
       Authentification authentification=new Authentification();
@@ -38,8 +38,6 @@ public class JiraClient {
         return responseObject;
 
     }
-
-
 
     public  int getStatistics (String projectName, String taskName )
     {
@@ -128,7 +126,6 @@ public class JiraClient {
 
     public static void loopThroughChangeLogs(JSONArray history, UpdatedItem update)
     {
-
         //outer loop
         for (int j=0; j<history.length();j++)
         {
@@ -143,6 +140,8 @@ public class JiraClient {
             String datumStringUpdate=lastHistory.getString("created");
             LocalDate date=LocalDate.parse(datumStringUpdate.substring(0,10));
             update.setLastChangedOn(date);
+            LocalTime time = LocalTime.parse(datumStringUpdate.substring(11,19));
+            update.setLastChangedOnTime(time);
            for ( int n=0; n<changeLogArray.length(); n++)
             {
                 JSONObject logItemObject = changeLogArray.getJSONObject(n);

@@ -72,11 +72,16 @@ function updateUpdates() {
                 let dd = String(today.getDate()).padStart(2, '0');
                 let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
                 let yyyy = today.getFullYear();
+                let time = today.getTime();
+                let correctedTime = time - 30000;
+
+                let issueDate = new Date(obj.lastChangedOn + " " + obj.lastChangedOnTime);
+                let issueTime = issueDate.getTime();
 
                 today = yyyy + '-' + mm + '-' + dd;
 
                 //Check if status is set to done AND it has been changed today
-                if(obj.resolved === true && obj.lastChangedOn === today){
+                if(obj.resolved === true && obj.lastChangedOn === today && issueTime > correctedTime){
                     lastUpdatedIssueDone = true;
                 }
 
