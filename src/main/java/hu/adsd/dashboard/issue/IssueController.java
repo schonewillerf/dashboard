@@ -17,7 +17,11 @@ public class IssueController {
     private final UpdateItemRepository updateItemRepository;
 
     // Constructor
-    public IssueController(IssueRepository repository, ProjectSummaryDataRepository projectSummaryDataRepository, UpdateItemRepository updateItemRepository) {
+    public IssueController(
+        IssueRepository repository, 
+        ProjectSummaryDataRepository projectSummaryDataRepository, 
+        UpdateItemRepository updateItemRepository
+    ) {
         this.repository = repository;
         this.projectSummaryDataRepository = projectSummaryDataRepository;
         this.updateItemRepository = updateItemRepository;
@@ -91,6 +95,7 @@ public class IssueController {
             // Create new ProjectSummaryData with current issue status e.g. "To Do", "Doing", "Done" etc.
             ProjectSummaryData currentIssueData = new ProjectSummaryData(issue.getIssueStatus());
 
+            // comment needed
             int issueIndex = summaryData.indexOf(currentIssueData);
             if (issueIndex < 0) {
                 currentIssueData.increment(issue.getStoryPoints());

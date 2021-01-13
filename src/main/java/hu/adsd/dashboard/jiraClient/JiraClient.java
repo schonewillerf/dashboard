@@ -1,5 +1,6 @@
 package hu.adsd.dashboard.jiraClient;
 
+import hu.adsd.dashboard.burndown.Sprint;
 import hu.adsd.dashboard.issue.Issue;
 import hu.adsd.dashboard.issue.UpdatedItem;
 import kong.unirest.JsonNode;
@@ -52,6 +53,18 @@ public class JiraClient {
         return total;
 
 
+    }
+
+    public static Sprint getCurrentSprint() {
+
+        String query = "https://andgreg.atlassian.net/rest/agile/1.0/board/3/sprint?state=active";
+        JSONObject resObj = sendNetworkRequest(query);
+        JSONObject sprintArray = resObj.getJSONArray("values").getJSONObject(0);
+
+        String startDate = sprintArray.getString("startDate").substring(0, 10);
+        String endDate = sprintArray.getString("endDate").substring(0, 10);
+
+        return new Sprint(startDate, endDate);
     }
 
 
