@@ -2,4 +2,6 @@ package hu.adsd.dashboard.burndown;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface SprintRepository extends JpaRepository<Sprint, Integer> {}
+public interface SprintRepository extends JpaRepository<Sprint, Integer> {
+    Sprint findAllByJiraId(int jiraId);
+}
