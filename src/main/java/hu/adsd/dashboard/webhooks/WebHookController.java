@@ -61,30 +61,36 @@ public class WebHookController {
     }
 
     @PostMapping("/issue")
-    public void webHookListener()
-    {
-        // refresh data
-        List<Issue> allIssues = JiraClient.getAllIssues();
-        List<ProjectSummaryData> summaryData = new ArrayList<>();
+    public void webHookListener() {
 
+        List<Issue> allIssues = JiraClient.getAllIssues();
+        List<ProjectSummaryData> summaryDataList = new ArrayList<>();
+
+        // Loop over issues and increment items and storyPoint for respective projectSummary
+        //
+        // Inspired by the MutableInt method from: 
+        // https://stackoverflow.com/questions/81346/most-efficient-way-to-increment-a-map-value-in-java
+        //
         for (Issue issue : allIssues) {
 
             ProjectSummaryData currentIssueData = new ProjectSummaryData(issue.getIssueStatus());
 
-            if (summaryData.contains(currentIssueData)) {
-                currentIssueData = summaryData.get(summaryData.indexOf(currentIssueData));
-            }
+            // returns the index of the first occurence or -1 if there are none
+            int issueIndex = summaryDataList.indexOf(currentIssueData);
 
-            currentIssueData.incrementItems();
-            currentIssueData.incrementStoryPoints(issue.getStoryPoints());
-            summaryData.add(currentIssueData);
+            if (issueIndex < 0) {
+                currentIssueData.increment(issue.getStoryPoints());
+                summaryDataList.add(currentIssueData);
+            } else {
+                summaryDataList.get(issueIndex).increment(issue.getStoryPoints());
+            }
         }
 
         // Save totals to DB
         projectSummaryDataRepository.deleteAll();
-        projectSummaryDataRepository.saveAll(summaryData);
+        projectSummaryDataRepository.saveAll(summaryDataList);
 
-        //updated tasks
+        //update tasks
         List<UpdatedItem> listUpdatedItems= JiraClient.getUpdates("1w", 10);
         updateItemRepository.deleteAll();
         updateItemRepository.saveAll(listUpdatedItems);
