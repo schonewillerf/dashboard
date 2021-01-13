@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 public class UpdatedItem {
@@ -17,6 +18,7 @@ public class UpdatedItem {
     private int storyPoints;
     private String itemKey;
     private LocalDate lastChangedOn;
+    private LocalTime lastChangedOnTime;
     private boolean isResolved;
     private String itemSummary;
     private String avatarUrl;
@@ -111,6 +113,14 @@ public class UpdatedItem {
 
     public boolean isResolved() {
         return isResolved;
+    }
+
+    public LocalTime getLastChangedOnTime() {
+        return lastChangedOnTime;
+    }
+
+    public void setLastChangedOnTime(LocalTime lastChangedOnTime) {
+        this.lastChangedOnTime = lastChangedOnTime;
     }
 
     public void setResolved(boolean resolved) {
