@@ -1,5 +1,7 @@
 package hu.adsd.dashboard.sentiment;
 
+import hu.adsd.dashboard.burndown.Sprint;
+import hu.adsd.dashboard.burndown.SprintRepository;
 import hu.adsd.dashboard.messenger.MessageService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,15 +16,19 @@ public class SentimentController {
     // Properties
     private final SentimentDataRepository sentimentDataRepository;
     private final DailySentimentRepository dailySentimentRepository;
+    private final SprintRepository sprintRepository;
     private final MessageService messageService;
 
     // Constructor
     public SentimentController(
             SentimentDataRepository sentimentDataRepository,
             DailySentimentRepository dailySentimentRepository,
-            MessageService messageService) {
+            SprintRepository sprintRepository,
+            MessageService messageService
+        ) {
         this.sentimentDataRepository = sentimentDataRepository;
         this.dailySentimentRepository = dailySentimentRepository;
+        this.sprintRepository = sprintRepository;
         this.messageService = messageService;
     }
 
@@ -59,9 +65,10 @@ public class SentimentController {
     @GetMapping("/sentimentdailychart")
     public List<DailySentiment> getDailySentiment() {
 
-        // Will be dynamic at some point
-        LocalDate startDate = LocalDate.parse("2020-12-28");
-        LocalDate endDate = LocalDate.parse("2021-01-08");
+        Sprint currentSprint = sprintRepository.findAll().get(0);
+
+        LocalDate startDate = LocalDate.parse(currentSprint.getStartDateString());
+        LocalDate endDate = LocalDate.parse(currentSprint.getEndDateString());
 
         return dailySentimentRepository.findAllByDateBetweenOrderByDate( startDate, endDate );
     }

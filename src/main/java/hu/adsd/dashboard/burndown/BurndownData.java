@@ -2,7 +2,6 @@ package hu.adsd.dashboard.burndown;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 
 /**
  *  This will create table in database named burndown_data with PK id
