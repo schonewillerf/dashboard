@@ -61,8 +61,9 @@ public class JiraClient {
 
         String startDate = sprintArray.getString("startDate").substring(0, 10);
         String endDate = sprintArray.getString("endDate").substring(0, 10);
+        int jiraId = sprintArray.getInt("id");
 
-        return new Sprint(startDate, endDate);
+        return new Sprint(startDate, endDate, jiraId);
     }
 
 

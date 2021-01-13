@@ -14,10 +14,12 @@ public class Sprint {
     
     private String startDateString;
     private String endDateString;
+    private int jiraId;
 
-    public Sprint(String startDateString, String endDateString) {
+    public Sprint(String startDateString, String endDateString, int jiraId) {
         this.startDateString = startDateString;
         this.endDateString = endDateString;
+        this.jiraId = jiraId;
     }
 
     protected Sprint() {}
@@ -44,5 +46,13 @@ public class Sprint {
 
     public void setEndDateString(String endDateString) {
         this.endDateString = endDateString;
-    }    
+    }
+
+    public int getJiraId() {
+        return jiraId;
+    }
+
+    public void setJiraId(int jiraId) {
+        this.jiraId = jiraId;
+    }
 }

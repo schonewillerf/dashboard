@@ -47,8 +47,14 @@ public class WebHookController {
         Sprint currentSprint = JiraClient.getCurrentSprint();
 
         // Save current sprintdays
-        sprintRepository.deleteAll();
-        sprintRepository.save(currentSprint);
+        Sprint sprintToBeUpdated = sprintRepository.findAllByJiraId(currentSprint.getJiraId());
+        if (sprintToBeUpdated == null){
+            sprintRepository.save(currentSprint);
+        } else {
+            sprintToBeUpdated.setEndDateString(currentSprint.getEndDateString());
+            sprintToBeUpdated.setStartDateString(currentSprint.getStartDateString());
+            sprintRepository.save(sprintToBeUpdated);
+        }
 
         // Recalculate expected burndown
         burndownGenerator.generateEstimatedBurndownData(currentSprint);
