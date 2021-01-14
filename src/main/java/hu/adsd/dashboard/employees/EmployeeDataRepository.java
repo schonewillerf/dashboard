@@ -1,4 +1,4 @@
-package hu.adsd.dashboard.employee;
+package hu.adsd.dashboard.employees;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

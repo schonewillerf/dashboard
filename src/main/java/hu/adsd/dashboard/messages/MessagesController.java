@@ -1,4 +1,4 @@
-package hu.adsd.dashboard.messenger;
+package hu.adsd.dashboard.messages;
 
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
-public class MessengerController {
-    private final MessageService messageService;
+public class MessagesController {
+    private final MessagesService messagesService;
 
-    public MessengerController(MessageService messageService) {
-        this.messageService = messageService;
+    public MessagesController(MessagesService messagesService) {
+        this.messagesService = messagesService;
     }
 
     // update emmitter
@@ -29,8 +29,8 @@ public class MessengerController {
             sseEmitter.completeWithError(e);
         }
 
-        sseEmitter.onCompletion(()->messageService.listEmitters.remove(sseEmitter));
-        messageService.listEmitters.add(sseEmitter);
+        sseEmitter.onCompletion(()-> messagesService.listEmitters.remove(sseEmitter));
+        messagesService.listEmitters.add(sseEmitter);
 
         return sseEmitter;
     }

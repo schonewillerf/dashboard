@@ -1,21 +1,18 @@
 package hu.adsd.dashboard.jiraClient;
 
 import hu.adsd.dashboard.burndown.Sprint;
-import hu.adsd.dashboard.issue.Issue;
-import hu.adsd.dashboard.issue.UpdatedItem;
+import hu.adsd.dashboard.issues.Issue;
+import hu.adsd.dashboard.issues.UpdatedItem;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Component
 public class JiraClient {

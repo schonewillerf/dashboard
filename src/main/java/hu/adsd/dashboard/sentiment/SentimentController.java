@@ -2,7 +2,7 @@ package hu.adsd.dashboard.sentiment;
 
 import hu.adsd.dashboard.burndown.Sprint;
 import hu.adsd.dashboard.burndown.SprintRepository;
-import hu.adsd.dashboard.messenger.MessageService;
+import hu.adsd.dashboard.messages.MessagesService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,19 +17,19 @@ public class SentimentController {
     private final SentimentDataRepository sentimentDataRepository;
     private final DailySentimentRepository dailySentimentRepository;
     private final SprintRepository sprintRepository;
-    private final MessageService messageService;
+    private final MessagesService messagesService;
 
     // Constructor
     public SentimentController(
             SentimentDataRepository sentimentDataRepository,
             DailySentimentRepository dailySentimentRepository,
             SprintRepository sprintRepository,
-            MessageService messageService
+            MessagesService messagesService
         ) {
         this.sentimentDataRepository = sentimentDataRepository;
         this.dailySentimentRepository = dailySentimentRepository;
         this.sprintRepository = sprintRepository;
-        this.messageService = messageService;
+        this.messagesService = messagesService;
     }
 
     @GetMapping("/sentimentdata")
@@ -57,7 +57,7 @@ public class SentimentController {
         dailySentiment.setAverageSentiment( averageSentiment );
         dailySentimentRepository.save( dailySentiment );
 
-        messageService.sendMessage("updateSentiment");
+        messagesService.sendMessage("updateSentiment");
 
         return sentimentDataRepository.countSentimentByValue(formattedDate);
     }
