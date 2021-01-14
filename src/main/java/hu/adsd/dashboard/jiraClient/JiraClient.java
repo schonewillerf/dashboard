@@ -190,54 +190,25 @@ public class JiraClient {
             Issue issue=new Issue();
             // standard  parsing of json response to retrieve important information
             JSONObject jsonObjectIssue=issues.getJSONObject(i);
-            String issueKey=jsonObjectIssue.getString("key");
-            issue.setIssueKey(issueKey);
+
             JSONObject fieldsObject =jsonObjectIssue.getJSONObject("fields");
-            String statusCategoryChangeDate= fieldsObject.getString("statuscategorychangedate");
-            issue.setStatusCatogryChangedData(statusCategoryChangeDate);
-            String projectKey=fieldsObject.getJSONObject("project").getString("key");
-            issue.setProjectKey(projectKey);
-            String projectName=fieldsObject.getJSONObject("project").getString("name");
-            issue.setProjectName(projectName);
+
             String status =fieldsObject.getJSONObject("status").getString("name");
             issue.setIssueStatus(status);
-
-            if (notNullObject(fieldsObject,"summary"))
-            {
-                String issueName=fieldsObject.getString("summary");
-                issue.setIssueName(issueName);
-            }
-
-            if (notNullObject(fieldsObject,"assignee"))
-            {
-                String assigne= fieldsObject.getJSONObject("assignee").getString("displayName");
-                issue.setAssignedTo(assigne);
-            }
-
-            if(notNullObject(fieldsObject,"description"))
-            {
-                String description=fieldsObject.getString("description");
-                issue.setDescription(description);
-            }
 
             //Stroy point are saved to customfield_10016
             if (notNullObject(fieldsObject,"customfield_10016"))
             {
                 Integer sp=fieldsObject.getInt("customfield_10016");
                 issue.setStoryPoints(sp);
-
             }
 
             //add issue by issue in a list with all issues
-                issueList.add(issue);
-
-            }
+            issueList.add(issue);
+        }
 
         return issueList;
-
     }
-
-
 
     private static boolean notNullObject(JSONObject obj, String key)
     {
@@ -246,24 +217,6 @@ public class JiraClient {
 
         else
         return false;
-
     }
-
-    public static int findSPwithRegex(String description)
-    {
-        Pattern pattern =Pattern.compile("SP-(\\d*)",Pattern.CASE_INSENSITIVE);
-        Matcher matcher=pattern.matcher(description);
-        if(matcher.find())
-        {                    // cut "Sp-" away, save story points as integer
-            int storyPoints=Integer.parseInt(matcher.group().substring(3));
-
-            return storyPoints;
-
-            }
-
-        return 0;
-    }
-
-
 
 }
