@@ -3,11 +3,11 @@ package hu.adsd.dashboard.webhooks;
 import hu.adsd.dashboard.burndown.BurndownGenerator;
 import hu.adsd.dashboard.burndown.Sprint;
 import hu.adsd.dashboard.burndown.SprintRepository;
-import hu.adsd.dashboard.issue.Issue;
-import hu.adsd.dashboard.issue.UpdateItemRepository;
-import hu.adsd.dashboard.issue.UpdatedItem;
+import hu.adsd.dashboard.issues.Issue;
+import hu.adsd.dashboard.issues.UpdateItemRepository;
+import hu.adsd.dashboard.issues.UpdatedItem;
 import hu.adsd.dashboard.jiraClient.JiraClient;
-import hu.adsd.dashboard.messenger.MessageService;
+import hu.adsd.dashboard.messages.MessagesService;
 import hu.adsd.dashboard.projectSummary.ProjectSummaryData;
 import hu.adsd.dashboard.projectSummary.ProjectSummaryDataRepository;
 
@@ -23,20 +23,20 @@ public class WebHookController {
     private final ProjectSummaryDataRepository projectSummaryDataRepository;
     private final UpdateItemRepository updateItemRepository;
     private final SprintRepository sprintRepository;
-    private final MessageService messageService;
+    private final MessagesService messagesService;
     private final BurndownGenerator burndownGenerator;
 
     public WebHookController(
-        ProjectSummaryDataRepository projectSummaryDataRepository, 
-        UpdateItemRepository updateItemRepository,
-        SprintRepository sprintRepository,
-        MessageService messageService,
-        BurndownGenerator burndownGenerator
+            ProjectSummaryDataRepository projectSummaryDataRepository,
+            UpdateItemRepository updateItemRepository,
+            SprintRepository sprintRepository,
+            MessagesService messagesService,
+            BurndownGenerator burndownGenerator
     ) {
         this.projectSummaryDataRepository = projectSummaryDataRepository;
         this.updateItemRepository = updateItemRepository;
         this.sprintRepository = sprintRepository;
-        this.messageService = messageService;
+        this.messagesService = messagesService;
         this.burndownGenerator = burndownGenerator;
     }
 
@@ -96,6 +96,6 @@ public class WebHookController {
         updateItemRepository.saveAll(listUpdatedItems);
 
         //Send message to clients
-        messageService.sendMessage("updateScrumboard");
+        messagesService.sendMessage("updateScrumboard");
     }
 }

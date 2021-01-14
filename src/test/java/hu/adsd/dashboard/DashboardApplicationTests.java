@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import hu.adsd.dashboard.burndown.SprintIterator;
-import hu.adsd.dashboard.employee.EmployeeData;
+import hu.adsd.dashboard.employees.EmployeeData;
 
 @SpringBootTest
 class DashboardApplicationTests {

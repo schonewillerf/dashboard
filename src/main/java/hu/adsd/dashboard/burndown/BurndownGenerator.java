@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import hu.adsd.dashboard.employee.EmployeeData;
-import hu.adsd.dashboard.employee.EmployeeDataRepository;
+import hu.adsd.dashboard.employees.EmployeeData;
+import hu.adsd.dashboard.employees.EmployeeDataRepository;
 
 @Component
 public class BurndownGenerator {

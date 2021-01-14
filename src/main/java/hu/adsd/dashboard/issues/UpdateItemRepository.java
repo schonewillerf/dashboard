@@ -1,4 +1,4 @@
-package hu.adsd.dashboard.issue;
+package hu.adsd.dashboard.issues;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
