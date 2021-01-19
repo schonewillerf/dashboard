@@ -27,6 +27,14 @@ public class EmployeeData {
     private int workingHoursWe;
     private int workingHoursTh;
     private int workingHoursFr;
+    private int workingHoursSa;
+    private int workingHoursSu;
+    private int workingHoursMo2;
+    private int workingHoursTu2;
+    private int workingHoursWe2;
+    private int workingHoursTh2;
+    private int workingHoursFr2;
+
 
     // Intentionally left empty
     protected EmployeeData() { }
@@ -109,4 +117,59 @@ public class EmployeeData {
         this.workingHoursFr = workingHoursFr;
     }
 
+    public int getWorkingHoursSa() {
+        return workingHoursSa;
+    }
+
+    public void setWorkingHoursSa(int workingHoursSa) {
+        this.workingHoursSa = workingHoursSa;
+    }
+
+    public int getWorkingHoursSu() {
+        return workingHoursSu;
+    }
+
+    public void setWorkingHoursSu(int workingHoursSu) {
+        this.workingHoursSu = workingHoursSu;
+    }
+
+    public int getWorkingHoursMo2() {
+        return workingHoursMo2;
+    }
+
+    public void setWorkingHoursMo2(int workingHoursMo2) {
+        this.workingHoursMo2 = workingHoursMo2;
+    }
+
+    public int getWorkingHoursTu2() {
+        return workingHoursTu2;
+    }
+
+    public void setWorkingHoursTu2(int workingHoursTu2) {
+        this.workingHoursTu2 = workingHoursTu2;
+    }
+
+    public int getWorkingHoursWe2() {
+        return workingHoursWe2;
+    }
+
+    public void setWorkingHoursWe2(int workingHoursWe2) {
+        this.workingHoursWe2 = workingHoursWe2;
+    }
+
+    public int getWorkingHoursTh2() {
+        return workingHoursTh2;
+    }
+
+    public void setWorkingHoursTh2(int workingHoursTh2) {
+        this.workingHoursTh2 = workingHoursTh2;
+    }
+
+    public int getWorkingHoursFr2() {
+        return workingHoursFr2;
+    }
+
+    public void setWorkingHoursFr2(int workingHoursFr2) {
+        this.workingHoursFr2 = workingHoursFr2;
+    }
 }
